@@ -3,7 +3,11 @@
 n = float(input('Enter the Number '))
 
 def DecimalDigitPrint(n):
+    if (n<0): n =-n
     decimal_digits = n - n//1
+    if (decimal_digits == 0): 
+        print(f' No decimal symbol')
+        return
     decimal_digit = (decimal_digits * 10) //1
     print(f' Forcs decimal symbol is {int(decimal_digit)}')
 
