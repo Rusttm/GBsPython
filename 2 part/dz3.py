@@ -7,4 +7,5 @@
 
 n = int(input('Enter the Number '))
 my_dict = {x: round((1+1/x)**x,2) for x in range(1,n+1)}
-print(f'{my_dict}')
+print(f'Для N = {n} {my_dict}')
+print(f'Сумма {sum(my_dict.values())}')
