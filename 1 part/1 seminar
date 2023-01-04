@@ -1,10 +1,11 @@
-# проверить являются ли два числа квадратами друг друга
-a, b = int(input()), int(input())
+# проверить являются ли числа квадратами друг друга
+a, b = int(input('Enter a= ')), int(input('Enter b= '))
+print(f'{a}, {b} -> ', end='')
 
-if (a==b*b or b==a*a):
+
+if (a == b*b or b == a*a):
     print('True')
 else:
     print('False')
 
 
-    
