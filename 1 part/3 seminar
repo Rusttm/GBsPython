@@ -1,0 +1,10 @@
+# выводить числа от -N до N
+
+n = int(input('Enter the Number'))
+
+def CounterPrint(n):
+    for number in range(-n, n+1):
+        print(f'{number}', end=' ')
+    print()
+
+CounterPrint(n)
