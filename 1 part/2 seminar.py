@@ -11,6 +11,6 @@ def MaxFunction():
         input_array.append(input_num) 
     
     print(input_array)
-    print(f'максимальное число -{max_num}')
+    print(f'максимальное число {max_num}')
 
 MaxFunction()
