@@ -18,9 +18,11 @@ def Equation1(a,b,c):
         x2 = (-b - discriminant**0.5)/2*a
         print(f'Решения уравнения: {x1=} {x2=}')
 
-def Equation2(a,b,c):
+# import sympy
+# x = sympy.Symbol('x')
+# def Equation2(a,b,c):
 
-    
+
 
 Equation1(a,b,c)
 
