@@ -23,7 +23,10 @@ for i in range(k):
         result_string += f'{coef_list[i]}*{x_list[i]}'
         if coef_list[i+1] > 0:
             result_string += ' + '
-result_string += f'{coef_list[k]} = 0'
+if (coef_list[i] != 0):            
+    result_string += f'{coef_list[k]} = 0'
+else:
+    result_string += f' = 0'
 
 # записываем в файл
 with open('dz4_file.txt', 'w') as f:
