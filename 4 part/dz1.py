@@ -7,7 +7,7 @@
 import decimal
 import math
 
-d = 0.001
+d = 0.000001
 x = math.pi
 
 D = decimal.Decimal
