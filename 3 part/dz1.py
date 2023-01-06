@@ -11,4 +11,4 @@ def SumOdd(my_list):
         result += my_list[i]
     return result
 
-print(SumOdd(my_list))
+print(f'{my_list} -> Ответ: {SumOdd(my_list)}')
