@@ -15,4 +15,4 @@ def MultTwin(my_list):
         result_list.append(my_list[i]*my_list[len(my_list)-i-1])
     return result_list
 
-print(MultTwin(my_list))
+print(f'{my_list} => {MultTwin(my_list)}')
