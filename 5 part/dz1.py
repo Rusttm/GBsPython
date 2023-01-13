@@ -1,8 +1,8 @@
 # Напишите программу, удаляющую из текста все слова, содержащие ""абв"".
 
-text_line = 'абвллешпбвщ ехфжфхй лиавфдова кецк еавбыапфабвфк пкпзшб йшвда щклабвбсьомдабв ьвбабвб'
+text_line = 'абвллешпбвщ ехфжфхй лиавфдова кецк еавбыапфабвфк пкпзшб йшвда щклабвбсьомдабв ьвбабвб вабоав'
 
-def DelIn(text_line: str, del_string: str):
+def DelIn(text_line: str, del_string: str) -> str:
     text_list = text_line.split()
     result_list = list(filter(lambda x: not CheckLine(x, del_string), text_list))
     result_text = ' '.join(result_list)
@@ -14,11 +14,6 @@ def CheckLine(string_line: str, inner_line: str) -> bool:
         if string_line[i:i+step] == inner_line:
             return True
     return False
-
-
-    
-
-
 
 
 print(DelIn(text_line, del_string='абв'))
