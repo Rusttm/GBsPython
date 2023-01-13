@@ -8,12 +8,48 @@
 
 # 72*28=2016
 
-def CandyGameWin(num: int, ) -> int:
-    return num%29
+import random
 
-candies = 2021
-while candies<0:
-    print(f'Осталось {candies}')
-    get = int(input(f'Enter number {CandyGameWin(candies)}'))
-    candies -= get
+def CandyGameWin(num: int, ) -> int:
+    '''best decision return or 28'''
+    res =28
+    if num%29:
+        res = num%29
+    return res
+
+
+def CandiGameF2F(candies=2021):
+    while candies>0:
+        print(f'Осталось {candies}: ')
+        get = int(input(f'1st Player (рекомендую {CandyGameWin(candies)}) -'))
+        candies -= get
+        if (candies == 0) : print('1st player WIN!') 
+        print(f'Осталось {candies}: ')
+        get = int(input(f'2nd Player (рекомендую {CandyGameWin(candies)}) -'))
+        candies -= get
+        if (candies == 0) : print('2nd player WIN!') 
     
+def CandiGameBot(candies=2021):
+    while candies>0:
+        print(f'Осталось {candies}: ')
+        if CandyGameWin(candies) == 28:
+            get = int(input(f'Player (любое число) -'))
+        else:
+            get = int(input(f'Player (рекомендую {CandyGameWin(candies)}) -'))
+        candies -= get
+        if (candies == 0) : 
+            print('Player WIN!')
+            break
+        print(f'Осталось {candies}: ')
+        if CandyGameWin(candies) == 28:
+            get = random.randint(1,29)
+        else:
+            get = CandyGameWin(candies)
+        print(f'Bot have got -{get}')
+        candies -= get
+        if (candies == 0) : 
+            print('Bot WIN!')
+            break
+
+
+CandiGameBot(candies=100)
