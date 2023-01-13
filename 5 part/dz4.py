@@ -1,14 +1,16 @@
 # Реализуйте RLE алгоритм: реализуйте модуль сжатия и восстановления данных.
 
-file_4code = '5dz3_rle_4code.txt'
-file_coded = '5dz3_rle_coded.txt'
-file_decoded = '5dz3_rle_decoded.txt'
+file_4code = '5dz4_rle_4code.txt'
+file_coded = '5dz4_rle_coded.txt'
+file_decoded = '5dz4_rle_decoded.txt'
 
 my_textes = []
 
 # читаем из файла
 with open(file_4code, 'r') as f1:
-    my_textes = f1.readlines()
+    for row in f1:
+        my_textes.append(row.rstrip('\n'))
+
 
 print(f'Прочитано из файла для кодирования {my_textes}')
 
@@ -23,11 +25,14 @@ def LineCoder(my_string: str) -> str:
         else:
             result_line += f'{counter}{my_string[i-1]}'
             counter = 1
+        if i == len(my_string)-1:
+            result_line += f'{counter}{my_string[i]}'
         current_char = my_string[i]
+    
     return result_line
 
 
-# кодируем по строкам и пишем в файл
+# кодируем по строкам и сразу пишем в файл
 with open(file_coded, 'w') as f2:
     for elem in my_textes:
         f2.write(f'{LineCoder(elem)}\n')
@@ -40,4 +45,28 @@ with open(file_coded, 'r') as f3:
 
 print(f'Прочитано из файла для декодирования {coded_textes}')
 
+def LineDecoder(coded_string='1B4A') -> str:
+    digits_list = [str(i) for i in range(10)]
+    result_string = ''
+    num_str = ''
+    count = 0
+    for i in range(len(coded_string)):
+        if coded_string[i] in digits_list:
+            num_str += coded_string[i]
+        else:
+            if num_str=='':
+                count = 0
+            else:
+                count = int(num_str)
+            # print(f'{count=}')
+            for c in range(count):
+                result_string += coded_string[i]
+            num_str = ''
+    return result_string
+
+
+# записать декодированное в файл 
+with open(file_decoded, 'w') as f4:
+    for elem in coded_textes:
+        f4.write(f'{LineDecoder(elem)}\n')
 
