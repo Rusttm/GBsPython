@@ -11,7 +11,7 @@
 import random
 
 def CandyGameWin(num: int, ) -> int:
-    '''best decision return or 28'''
+    '''возвращает лучшее решение или 28'''
     res =28
     if num%29:
         res = num%29
@@ -41,6 +41,8 @@ def CandiGameBot(candies=2021):
             print('Player WIN!')
             break
         print(f'Осталось {candies}: ')
+
+        # AI бота - если игрок ошибается, то бот перехватывает инициативу
         if CandyGameWin(candies) == 28:
             get = random.randint(1,29)
         else:
