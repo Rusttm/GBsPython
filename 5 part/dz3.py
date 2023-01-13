@@ -10,6 +10,7 @@ class XOgame():
         self.current_player = 0
         self.human_player = 0
         self.bot_player = 0
+        self.game_type = 0 #0 - F2F and 1-Human vs Bot
         self.player_dict = {1:'X', -1:'O'}
         
     def PrintField(self):
@@ -97,7 +98,6 @@ class XOgame():
         self.bot_player = -self.current_player
         print(f'Ваш противник будет играть {self.player_dict[self.bot_player]}')
 
-
     def PlayerTurn(self, change_player=False):
         coord = 'xx'
         
@@ -107,8 +107,8 @@ class XOgame():
             else:
                 self.current_player = -1
 
-        if self.current_player == self.bot_player:
-            print('перевожу на бота')
+        if (self.current_player == self.bot_player) and (self.game_type == 1):
+            
             self.BotTurn()
             return True
         while coord not in self.coord_list:
@@ -126,10 +126,13 @@ class XOgame():
             for i in range(3):
                 for ii in range(3):
                     if self.my_field[i][ii] == 0:
-                        if self.rand.randint(0,2):
+                        if self.rand.randint(0,9) == 1:
                             self.my_field[i][ii] = self.bot_player
+                            print('Бот походил:')
                             self.PrintField()
                             return True
+                        else:
+                            continue
         
 
 
@@ -139,6 +142,7 @@ class XOgame():
 
     def GameStart(self):
         print('Играем на поле:')
+        self.game_type = int(input('Выберите тип игры: 0 - игра с другом, 1 - игра с ботом'))
         self.PrintField()
         self.PlayersDefine()
         self.PlayerTurn()
