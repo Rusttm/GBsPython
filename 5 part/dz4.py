@@ -6,11 +6,13 @@ file_decoded = '5dz3_rle_decoded.txt'
 
 my_textes = []
 
+# читаем из файла
 with open(file_4code, 'r') as f1:
     my_textes = f1.readlines()
 
-print(my_textes)
+print(f'Прочитано из файла для кодирования {my_textes}')
 
+# кодер одной строки
 def LineCoder(my_string: str) -> str:
     result_line = ''
     current_char = my_string[0]
@@ -24,6 +26,18 @@ def LineCoder(my_string: str) -> str:
         current_char = my_string[i]
     return result_line
 
+
+# кодируем по строкам и пишем в файл
 with open(file_coded, 'w') as f2:
     for elem in my_textes:
         f2.write(f'{LineCoder(elem)}\n')
+
+
+# считываем закодированный файл по строкам
+coded_textes = []
+with open(file_coded, 'r') as f3:
+    coded_textes = f3.readlines()
+
+print(f'Прочитано из файла для декодирования {coded_textes}')
+
+
