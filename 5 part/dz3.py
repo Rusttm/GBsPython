@@ -6,6 +6,8 @@ class XOgame():
         self.my_field = [[0 for _ in range(3)] for _ in range(3)]
         self.coord_list = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
         self.current_player = 0
+        self.human_player = 0
+        self.bot_player = 0
         self.player_dict = {1:'X', -1:'O'}
         
     def PrintField(self):
@@ -84,9 +86,19 @@ class XOgame():
             return True
 
         return False
+    
+    def PlayersDefine(self):
+        while self.current_player not in [-1,1]:
+            self.current_player = int(input('Введите, чем будете играть? O:-1 X:1 '))
+        self.human_player = self.current_player
+        print(f'Вы будете играть {self.player_dict[self.current_player]}')
+        self.bot_player = -self.current_player
+        print(f'Ваш противник будет играть {self.player_dict[self.bot_player]}')
+
 
     def PlayerTurn(self, change_player=False):
         coord = 'xx'
+        
         if change_player:
             if self.current_player == -1:
                 self.current_player = 1
@@ -98,17 +110,21 @@ class XOgame():
             if coord == 'q':
                 print('Quit!')
                 return False
-        
+
         self.ChangeValue(coord=coord, value=self.current_player)
         self.PrintField()
         return True
+
+    # def BotTurn(self):
+
 
 
 
 
     def GameStart(self):
-        while self.current_player not in [-1,1]:
-            self.current_player = int(input('Введите, чем будете играть? O:-1 X:1 '))
+        print('Играем на поле:')
+        self.PrintField()
+        self.PlayersDefine()
         self.PlayerTurn()
         while True:
             if not self.PlayerTurn(change_player=True):
@@ -121,10 +137,4 @@ class XOgame():
 
 
 my_game = XOgame()
-
 my_game.GameStart()
-# print(my_game.ChangeValue(coord='a3', value=1))
-# my_game.ChangeValue(coord='b2', value=1)
-# my_game.ChangeValue(coord='c1', value=1)
-# my_game.PrintField()
-# my_game.CheckWin()
