@@ -6,3 +6,14 @@
 # a) Добавьте игру против бота
 # b) Подумайте как наделить бота ""интеллектом""
 
+# 72*28=2016
+
+def CandyGameWin(num: int, ) -> int:
+    return num%29
+
+candies = 2021
+while candies<0:
+    print(f'Осталось {candies}')
+    get = int(input(f'Enter number {CandyGameWin(candies)}'))
+    candies -= get
+    
