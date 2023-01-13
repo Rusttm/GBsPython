@@ -3,6 +3,8 @@
 
 class XOgame():
     def __init__(self) -> None:
+        import random
+        self.rand = random
         self.my_field = [[0 for _ in range(3)] for _ in range(3)]
         self.coord_list = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3']
         self.current_player = 0
@@ -68,11 +70,11 @@ class XOgame():
             winer = 3
 
         # ищем победителя
-        if ( winer == -3 ):
-            print('O is winer!') 
+        if ( winer == 3 * self.human_player ):
+            print('You WIN!!!') 
             return True
-        elif ( winer == 3 ):
-            print('X is winer!')
+        elif ( winer == 3 * self.bot_player):
+            print('Your opponent win!')
             return True
 
         # проверяем окончание игры
@@ -105,6 +107,10 @@ class XOgame():
             else:
                 self.current_player = -1
 
+        if self.current_player == self.bot_player:
+            print('перевожу на бота')
+            self.BotTurn()
+            return True
         while coord not in self.coord_list:
             coord = input(f'Please enter coordinate for {self.player_dict[self.current_player]} or q for quit: ')
             if coord == 'q':
@@ -115,7 +121,17 @@ class XOgame():
         self.PrintField()
         return True
 
-    # def BotTurn(self):
+    def BotTurn(self):
+        while True:
+            for i in range(3):
+                for ii in range(3):
+                    if self.my_field[i][ii] == 0:
+                        if self.rand.randint(0,2):
+                            self.my_field[i][ii] = self.bot_player
+                            self.PrintField()
+                            return True
+        
+
 
 
 
