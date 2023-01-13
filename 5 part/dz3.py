@@ -85,8 +85,14 @@ class XOgame():
 
         return False
 
-    def PlayerTurn(self):
+    def PlayerTurn(self, change_player=False):
         coord = 'xx'
+        if change_player:
+            if self.current_player == -1:
+                self.current_player = 1
+            else:
+                self.current_player = -1
+
         while coord not in self.coord_list:
             coord = input(f'Please enter coordinate for {self.player_dict[self.current_player]} or q for quit: ')
             if coord == 'q':
@@ -103,8 +109,9 @@ class XOgame():
     def GameStart(self):
         while self.current_player not in [-1,1]:
             self.current_player = int(input('Введите, чем будете играть? O:-1 X:1 '))
+        self.PlayerTurn()
         while True:
-            if not self.PlayerTurn():
+            if not self.PlayerTurn(change_player=True):
                 return
             if self.CheckWin():
                 print('END Game')
