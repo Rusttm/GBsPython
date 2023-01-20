@@ -1,6 +1,9 @@
+'''модуль предназначен для записи/чтения в файлы csv и json (work_format = 'csv')
+есть конвертор из csv в json'''
+
+
 import csv
 import json
-import random
 
 work_format = 'json'
 csv_file = 'phonebook.csv'
@@ -62,7 +65,8 @@ def LoadData(file_type = work_format):
 
 def ConverterCsv2Json(path_csv_file = csv_file, path_json_file = json_file):
     database = LoadFromCsv(path_csv_file)
-    Add2Json(database, path_json_file)
+    for elem in database:
+        Add2Json(elem, path_json_file)
     return True
 
 

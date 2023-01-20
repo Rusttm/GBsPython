@@ -47,7 +47,8 @@ current_pos = [0,0] # current_pos[0] - номер текущей позиции
 
 # functions pack
 def SaveFields():
-    ''' записываем в файл path_csv_file = phonebook.csv '''
+    ''' записываем в файл path_csv_file = phonebook.csv
+    либо в phonebook.json, в зависимости от установок в модуле dbmodule'''
     current_id = random.randint(100, 10000)
     id_label.config(text=current_id)
     current_name = name.get()
