@@ -2,9 +2,9 @@ import csv
 import json
 import random
 
-path_csv_file = 'phonebook.csv'
-path_json_file = 'phonebook.json'
-def LoadFromCsv():
+csv_file = 'phonebook.csv'
+json_file = 'phonebook.json'
+def LoadFromCsv(path_csv_file = csv_file):
     database = [['Id', 'Name', 'Surname', 'Phone', 'Descr']]
     with open(path_csv_file, 'r') as file:
         reader = csv.reader(file)
@@ -14,36 +14,55 @@ def LoadFromCsv():
                 database.append(row)
     return database
 
-def Add2Csv(data):
+def LoadFromJson(path_json_file = json_file):
+    with open(path_json_file) as json_file:
+        my_data = json.load(json_file)
+
+    result = []
+    for key in my_data.keys():
+        result.append([key, my_data[key]['Name'],
+                       my_data[key]['Surname'],
+                       my_data[key]['Phone'],
+                       my_data[key]['Descr'] ])
+    return result
+
+def Add2Csv(data, path_csv_file = csv_file):
     with open(path_csv_file, 'a') as file:
         writer = csv.writer(file)
         writer.writerow(data)
         writer.writerow([])
     return True
 
-def Add2Json(data):
-    database = {'Name': 'Name', 'Surname': 'Surname', 'Phone': 'Phone', 'Descr': 'Descr'}
+def Add2Json(data, path_json_file = json_file):
+    database = ['Name', 'Surname', 'Phone', 'Descr']
     result = dict()
-
     for row in data:
-        key = random.randint(100, 10000)
-        result[key] = dict(zip(database, row))
-        print(result)
-
-    # with open(path_json_file, 'w') as file:
-    #
-    #
-    #     writer = csv.writer(file)
-    #     writer.writerow(data)
-    #     writer.writerow([])
+        result[row[0]] = dict(zip(database, row[1:]))
+    with open(path_json_file, 'w') as outfile:
+        json.dump(result, outfile)
+        # outfile.write(json.dump(result))
     return True
 
-def AddData(data):
-    Add2Csv(data)
+def AddData(data, file_type = 'csv'):
+    if file_type == 'csv':
+        Add2Csv(data)
+    if file_type == 'json':
+        Add2Json(data)
 
-def LoadData():
-    return LoadFromCsv()
+def LoadData(file_type = 'csv'):
+    if file_type == 'csv':
+        return LoadFromCsv()
+    if file_type == 'json':
+        return LoadFromJson()
 
-# def ConverterCsv2Json():
+def ConverterCsv2Json(path_csv_file = csv_file, path_json_file = json_file):
+    database = LoadFromCsv(path_csv_file)
+    Add2Json(database, path_json_file)
+    return True
 
-Add2Json([['My_Name', 'My_Surname', 'My_Phone', 'My_Descr'], ['No_Name', 'No_Surname', 'No_Phone', 'No_Descr']])
+
+if "__name__" == "__main__":
+    data = [['My_id', 'My_Name', 'My_Surname', 'My_Phone', 'My_Descr'],
+            ['No_id', 'No_Name', 'No_Surname', 'No_Phone', 'No_Descr']]
+    Add2Json(data)
+    print(LoadFromJson())
