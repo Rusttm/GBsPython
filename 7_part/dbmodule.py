@@ -12,7 +12,6 @@ def LoadFromCsv(path_csv_file = csv_file):
     database = [['Id', 'Name', 'Surname', 'Phone', 'Descr']]
     with open(path_csv_file, 'r') as file:
         reader = csv.reader(file)
-
         for row in reader:
             if row:
                 database.append(row)
@@ -38,13 +37,13 @@ def Add2Csv(data, path_csv_file = csv_file):
     return True
 
 def Add2Json(data, path_json_file = json_file):
-    database = ['Name', 'Surname', 'Phone', 'Descr']
+    data_form = ['Name', 'Surname', 'Phone', 'Descr']
     # to append data we must load current data
 
     with open(path_json_file) as loaded_json_file:
         json_data = json.load(loaded_json_file)
 
-    json_data[data[0]] = dict(zip(database, data[1:]))
+    json_data[data[0]] = dict(zip(data_form, data[1:]))
 
     with open(path_json_file, 'w') as outfile:
         json.dump(json_data, outfile)
