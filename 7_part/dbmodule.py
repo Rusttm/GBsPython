@@ -2,6 +2,7 @@ import csv
 import json
 import random
 
+work_format = 'json'
 csv_file = 'phonebook.csv'
 json_file = 'phonebook.json'
 def LoadFromCsv(path_csv_file = csv_file):
@@ -35,21 +36,25 @@ def Add2Csv(data, path_csv_file = csv_file):
 
 def Add2Json(data, path_json_file = json_file):
     database = ['Name', 'Surname', 'Phone', 'Descr']
-    result = dict()
-    for row in data:
-        result[row[0]] = dict(zip(database, row[1:]))
+    # to append data we must load current data
+
+    with open(path_json_file) as loaded_json_file:
+        json_data = json.load(loaded_json_file)
+
+    json_data[data[0]] = dict(zip(database, data[1:]))
+
     with open(path_json_file, 'w') as outfile:
-        json.dump(result, outfile)
-        # outfile.write(json.dump(result))
+        json.dump(json_data, outfile)
+
     return True
 
-def AddData(data, file_type = 'csv'):
+def AddData(data, file_type = work_format):
     if file_type == 'csv':
         Add2Csv(data)
     if file_type == 'json':
         Add2Json(data)
 
-def LoadData(file_type = 'csv'):
+def LoadData(file_type = work_format):
     if file_type == 'csv':
         return LoadFromCsv()
     if file_type == 'json':

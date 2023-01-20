@@ -61,7 +61,7 @@ def SaveFields():
     else:
         info_text = "Error! Not filled"
     top = tk.Toplevel()
-    top.geometry("180x120")
+    top.geometry("180x180")
     top.title(info_text)
 
     tk.Label(top, text=current_id).grid(row=0)
