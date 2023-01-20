@@ -97,6 +97,7 @@ def NextFields():
     '''вызывается по кнопке Next и из файла записывает в поля'''
     global current_pos
     global database
+    current_pos[0] += 1
     if current_pos[0] >= current_pos[1]:
         current_pos[0] = 0
 
@@ -106,7 +107,22 @@ def NextFields():
     lastname.insert(0, database[current_pos[0]][2])
     phone.insert(0, database[current_pos[0]][3])
     description.insert(0, database[current_pos[0]][4])
-    current_pos[0] += 1
+
+
+def PrevFields():
+    '''вызывается по кнопке Prev и из файла прописывает в поля'''
+    global current_pos
+    global database
+    current_pos[0] -= 1
+    if current_pos[0] < 0:
+        current_pos[0] = current_pos[1]-1
+
+    ClearFields()
+    id_label.config(text=database[current_pos[0]][0])
+    name.insert(0, database[current_pos[0]][1])
+    lastname.insert(0, database[current_pos[0]][2])
+    phone.insert(0, database[current_pos[0]][3])
+    description.insert(0, database[current_pos[0]][4])
 
 
 # buttons pack
@@ -136,8 +152,13 @@ tk.Button(master,
                                                        pady=4)
 
 tk.Button(master,
-          text='Next', command=NextFields).grid(row=6,
-                                                  column=2,
+          text='Prev', command=PrevFields).grid(row=7,
+                                                  column=0,
+                                                  sticky=tk.W,
+                                                    pady=4)
+tk.Button(master,
+          text='Next', command=NextFields).grid(row=7,
+                                                  column=1,
                                                   sticky=tk.W,
                                                     pady=4)
 
