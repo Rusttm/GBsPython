@@ -91,6 +91,7 @@ def LoadFields():
     current_pos = [0, 0]
     database = dbmodule.LoadData()
     current_pos[1] = len(database)
+    NextFields()
 
 def NextFields():
     '''вызывается по кнопке Next и из файла записывает в поля'''
