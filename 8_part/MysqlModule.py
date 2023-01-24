@@ -9,9 +9,10 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-# make new DB
-# mycursor.execute("CREATE DATABASE myGBdatabase")
 
+def CreateDb(db_name='myGBdatabase'):
+    """ initiate new DB """
+    mycursor.execute(f"CREATE DATABASE {db_name}")
 
 def ShowDB():
     # show databases
@@ -35,7 +36,6 @@ def MakeTable(tbl_name='New Table'):
     # make new table
     mycursor.execute(f"CREATE TABLE IF NOT EXISTS {tbl_name} (name VARCHAR(255), address VARCHAR(255))")
 
-
 def AddCol(tbl_name='Employees', tbl_column='id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='name'):
     """ create column in table """
     if col_after == 'FIRST':
@@ -44,11 +44,11 @@ def AddCol(tbl_name='Employees', tbl_column='id', col_type='INT AUTO_INCREMENT P
         mycursor.execute(f'ALTER TABLE {tbl_name} ADD COLUMN {tbl_column} {col_type} AFTER {col_after}')
 
 def AddFrgnKeyCol(tbl_name = 'Employees',
-                  tbl_column = 'id',
-                  col_type = 'INT AUTO_INCREMENT PRIMARY KEY',
-                  col_after = 'name',
-                  frgn_table = 'Departments',
-                  frgn_column = 'department_id'):
+                  tbl_column='id',
+                  col_type='INT AUTO_INCREMENT PRIMARY KEY',
+                  col_after='name',
+                  frgn_table='Departments',
+                  frgn_column='department_id'):
     """ make new column and  change it to foreign key """
     mycursor.execute(f'ALTER TABLE {tbl_name} ADD COLUMN {tbl_column} {col_type} AFTER {col_after}')
     # add new column department_id in Emploees and change column to foreign key
@@ -57,16 +57,9 @@ def AddFrgnKeyCol(tbl_name = 'Employees',
                      f'FOREIGN KEY ({frgn_column}) REFERENCES {frgn_table}({frgn_column}) '
                      'ON DELETE CASCADE')
 
-
 def ModCol(tbl_name='Employees', tbl_column='name', col_type='VARCHAR(255)'):
     """ modify column type """
     mycursor.execute(f'ALTER TABLE {tbl_name} MODIFY {tbl_column} {col_type}')
-
-
-
-def ModTable(tbl_name = 'Employees', tbl_column = 'id'):
-    pass
-
 
 def InitDB():
     """ Initializing tables and columns in the SQL BASE """
@@ -90,7 +83,7 @@ def InitDB():
     # AddFrgnKeyCol(tbl_name='Employees', tbl_column='department_id', col_type='INT', col_after='name')
     # AddFrgnKeyCol(tbl_name='Employees', tbl_column='manager_id', col_type='INT', col_after='name', frgn_table='Managers', frgn_column='manager_id')
     # AddFrgnKeyCol(tbl_name='Departments', tbl_column='manager_id', col_type='INT', col_after='department_id', frgn_table='Managers', frgn_column='manager_id')
-    ShowDB()
+
     ShowTables()
 
 
