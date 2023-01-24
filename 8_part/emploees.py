@@ -51,14 +51,11 @@ def AddFrgnKeyCol(tbl_name = 'Employees',
                      f'FOREIGN KEY ({frgn_column}) REFERENCES {frgn_table}({frgn_column}) '
                      'ON DELETE CASCADE')
 
-    #create
 
-def ModCol(tbl_name = 'Employees', tbl_column = 'name', col_type = 'VARCHAR(255)', col_after = 'name'):
-    # modify column
+def ModCol(tbl_name='Employees', tbl_column='name', col_type='VARCHAR(255)'):
+    ''' modify column type '''
     mycursor.execute(f'ALTER TABLE {tbl_name} MODIFY {tbl_column} {col_type}')
 
-
-    #create
 
 
 def ModTable(tbl_name = 'Employees', tbl_column = 'id'):
