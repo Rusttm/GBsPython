@@ -9,16 +9,26 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 def FillDataOffice():
-    tbl_name = 'Office'
-    tbl_scheme = '(room, floor, address)'
     office_address = '119002, Moscow, per Denezhniy, 19'
-    # mycursor.execute(f"INSERT INTO Office (room, floor, address) VALUES ('1','2','test')")
-    mycursor.execute("INSERT INTO Office (room, floor, address) VALUES ('418', '4', '119002 Moscow per Denezhniy 19')")
-    # for floor in range(1, 5):
-    #     for ii in range(1, 20):
-    #         room = f'{floor}{ii}'
-    #         print(f"INSERT INTO {tbl_name} {tbl_scheme} VALUES ('{room}', '{floor}', '{office_address}')")
-    #         mycursor.execute(f"INSERT INTO {tbl_name} {tbl_scheme} VALUES ('{room}', '{floor}', '{office_address}')")
-    data = mycursor.fetchall()
-    print(data)
-FillDataOffice()
+    for floor in range(1, 5):
+        for ii in range(1, 20):
+            room = f'{floor}{ii}'
+            FillTblData(tbl_name='Office', tbl_scheme='(room, floor, address)', data=f"('{room}', '{floor}', '{office_address}')")
+    # mydb.commit()
+
+def FillTblData(tbl_name = 'Office', tbl_scheme = '(room, floor, address)', data = ('1','2','test')):
+    mycursor.execute(f"INSERT INTO {tbl_name} {tbl_scheme} VALUES {data}")
+    mydb.commit()
+
+def ClearTblData(tbl_name = 'Office', condition = False):
+    if not condition:
+        mycursor.execute(f"TRUNCATE {tbl_name}")
+    else:
+        mycursor.execute(f"DELETE FROM {tbl_name} WHERE {condition}")
+    mydb.commit()
+
+# ClearTblData(tbl_name = 'Office')
+# FillDataOffice()
+
+
+
