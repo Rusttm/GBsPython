@@ -16,7 +16,7 @@ def FillDataOffice():
             FillTblData(tbl_name='Office', tbl_scheme='(room, floor, address)', data=f"('{room}', '{floor}', '{office_address}')")
     # mydb.commit()
 
-def FillTblData(tbl_name = 'Office', tbl_scheme = '(room, floor, address)', data = ('1','2','test')):
+def FillTblData(tbl_name = 'Office', tbl_scheme = '(room, floor, address)', data = "('1','2','test')"):
     mycursor.execute(f"INSERT INTO {tbl_name} {tbl_scheme} VALUES {data}")
     mydb.commit()
 
