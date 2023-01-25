@@ -26,10 +26,14 @@ class DepWindows:
         i = self.current_pos[0]
         self.ClearFields()
         self.id_name.config(text=self.data[i][0])
-        self.manager_name.insert(0, self.data[i][1])
+        mangr_id = self.data[i][1]
+        manager = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=mangr_id,
+                                                         tbl1_name='Departments', field1='manager_id',
+                                                         tbl2_name='Managers', field2='manager_id')
+
+        self.manager_name.insert(0, manager[0][1])
         self.dep_name.insert(0, self.data[i][2])
         self.dep_address_name.insert(0, self.data[i][3])
-
     def NextPosition(self):
         if self.current_pos[0] == self.current_pos[1]:
             self.current_pos[0] = 0
@@ -38,7 +42,13 @@ class DepWindows:
         self.ClearFields()
         i = self.current_pos[0]
         self.id_name.config(text=self.data[i][0])
-        self.manager_name.insert(0, self.data[i][1])
+
+        mangr_id = self.data[i][1]
+        manager = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=mangr_id,
+                                                         tbl1_name='Departments', field1='manager_id',
+                                                         tbl2_name='Managers', field2='manager_id')
+        self.manager_name.insert(0, manager[0][1])
+
         self.dep_name.insert(0, self.data[i][2])
         self.dep_address_name.insert(0, self.data[i][3])
 
