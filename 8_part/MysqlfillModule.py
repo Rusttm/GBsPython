@@ -11,7 +11,7 @@ mycursor = mydb.cursor()
 def FillDataOffice():
     office_address = '119002, Moscow, per Denezhniy, 19'
     for floor in range(1, 5):
-        for ii in range(1, 20):
+        for ii in range(10, 30):
             room = f'{floor}{ii}'
             FillTblData(tbl_name='Office', tbl_scheme='(room, floor, address)', data=f"('{room}', '{floor}', '{office_address}')")
     # mydb.commit()
@@ -27,8 +27,20 @@ def ClearTblData(tbl_name = 'Office', condition = False):
         mycursor.execute(f"DELETE FROM {tbl_name} WHERE {condition}")
     mydb.commit()
 
-# ClearTblData(tbl_name = 'Office')
-# FillDataOffice()
+def GetColFromTbl(tbl_name = 'Office', column ='room',  condition = False):
+    result = []
+    if not condition:
+        mycursor.execute(f"SELECT {column} FROM {tbl_name}")
+    else:
+        mycursor.execute(f"SELECT {column} FROM {tbl_name} WHERE {condition}")
+    my_result = mycursor.fetchall()
+    for x in my_result:
+        result.append(x[0])
+    return result
 
+def FullFillAll():
+    # ClearTblData(tbl_name = 'Office')
+    # FillDataOffice()
+    # print(GetColFromTbl(tbl_name = 'Office', column ='room',  condition = "floor=4"))
 
-
+FullFillAll()
