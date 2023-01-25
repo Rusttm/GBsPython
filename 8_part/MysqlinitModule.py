@@ -2,6 +2,7 @@ import mysql.connector
 
 mydb = mysql.connector.connect(
     host="localhost",
+    port="3307",
     user="root",
     password="root_pass",
     database='myGBdatabase'
@@ -64,28 +65,31 @@ def ModCol(tbl_name='Employees', tbl_column='name', col_type='VARCHAR(255)'):
 def InitDB():
     """ Initializing tables and columns in the SQL BASE """
     # MakeTable(tbl_name='Departments')
-    # MakeTable(tbl_name='Managers')
-    # MakeTable(tbl_name='Employees')
+    # AddCol(tbl_name='Departments', tbl_column='department_id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='FIRST')
+    # AddFrgnKeyCol(tbl_name='Departments', tbl_column='manager_id', col_type='INT', col_after='department_id', frgn_table='Managers', frgn_column='manager_id')
 
+    # MakeTable(tbl_name='Managers')
+    # AddCol(tbl_name='Managers', tbl_column='manager_id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='FIRST')
+    # mycursor.execute(f'ALTER TABLE Managers RENAME COLUMN address TO room')  # rename column
+
+    # MakeTable(tbl_name='Office')
+    # AddCol(tbl_name='Office', tbl_column='floor', col_type='INT', col_after='name')
+    # mycursor.execute(f'ALTER TABLE Office RENAME COLUMN name TO room')  # rename column
+
+    # MakeTable(tbl_name='Employees')
     # AddCol(tbl_name='Employees', tbl_column='id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='FIRST')
     # AddCol(tbl_name='Employees', tbl_column='phone', col_type='VARCHAR(32)', col_after='name')
     # ModCol(tbl_name='Employees', tbl_column='address', col_type='VARCHAR(255)')
-    # AddCol(tbl_name='Departments', tbl_column='department_id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='FIRST')
-    # AddCol(tbl_name='Managers', tbl_column='manager_id', col_type='INT AUTO_INCREMENT PRIMARY KEY', col_after='FIRST')
-
     # mycursor.execute(f'ALTER TABLE Employees MODIFY address VARCHAR(255) AFTER phone') #changes col placement
     # AddCol(tbl_name='Employees', tbl_column='room', col_type='VARCHAR(255)', col_after='address')
     # AddCol(tbl_name='Employees', tbl_column='is_manager', col_type='BOOLEAN', col_after='name')
     # mycursor.execute(f'ALTER TABLE Employees DROP COLUMN is_manager')  # delete column
-    # mycursor.execute(f'ALTER TABLE Managers RENAME COLUMN address TO room')  # rename column
-
-
     # AddFrgnKeyCol(tbl_name='Employees', tbl_column='department_id', col_type='INT', col_after='name')
     # AddFrgnKeyCol(tbl_name='Employees', tbl_column='manager_id', col_type='INT', col_after='name', frgn_table='Managers', frgn_column='manager_id')
-    # AddFrgnKeyCol(tbl_name='Departments', tbl_column='manager_id', col_type='INT', col_after='department_id', frgn_table='Managers', frgn_column='manager_id')
 
     ShowTables()
 
+InitDB()
 
 if '__name__' == '__main__':
     InitDB()
