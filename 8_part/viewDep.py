@@ -28,4 +28,28 @@ manager_name.grid(row=1, column=1)
 dep_name.grid(row=2, column=1)
 dep_address_name.grid(row=3, column=1)
 
+# объявляем кнопки
+dep_buttons_pack1 = tk.Frame(dep)
+dep_buttons_pack2 = tk.Frame(dep)
+quit_button = tk.Button(dep, text='Quit', command=dep.quit)
+update_button = tk.Button(dep, text='Update', command=dep.quit)
+prev_button = tk.Button(dep_buttons_pack1, text='Prev', command=dep.quit)
+next_button = tk.Button(dep_buttons_pack1, text='Next', command=dep.quit)
+new_button = tk.Button(dep_buttons_pack2, text='New', command=dep.quit)
+save_button = tk.Button(dep_buttons_pack2, text='Save', command=dep.quit)
+
+# update_button = tk.Button(dep_buttons_pack2, text='Update', command=dep.quit)
+
+# размещаем кнопки
+update_button.grid(row=4, column=0)
+quit_button.grid(row=5, column=0)
+dep_buttons_pack1.grid(row=4, column=1)
+dep_buttons_pack2.grid(row=5, column=1)
+
+prev_button.pack(side=tk.LEFT)
+next_button.pack(side=tk.RIGHT)
+new_button.pack(side=tk.LEFT)
+save_button.pack(side=tk.RIGHT)
+# update_button.pack(side=tk.TOP)
+
 dep.mainloop()
