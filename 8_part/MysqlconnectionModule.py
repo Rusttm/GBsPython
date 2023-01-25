@@ -9,10 +9,12 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 def LoadFromSQL(tbl_name = 'Office'):
-    mycursor.execute("SELECT * FROM Office")
+    mycursor.execute(f"SELECT * FROM {tbl_name}")
     data = mycursor.fetchall()
     result = []
     for row in data:
         result.append(list(row))
     return result
-print(LoadFromSQL(tbl_name = 'Office'))
+
+if '__name__' == '__main__':
+    print(LoadFromSQL(tbl_name = 'Office'))
