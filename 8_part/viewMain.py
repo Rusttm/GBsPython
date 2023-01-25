@@ -14,7 +14,7 @@ class MainWindow:
 
 
     def NewDepWin(self):
-        new_window = viewDep.DepWindows()
+        viewDep.DepWindows()
 
     def ClearFields(self):
         self.id_name.config(text="")
