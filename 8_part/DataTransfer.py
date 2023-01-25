@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 # print(sklearn.__version__)
 
 
-def DataFromTitanic(user = 'user', n = 100):
+def DataFromTitanic(user='user', n=100):
     data_csv = '/Users/johnlennon/Downloads/titanic.csv'
     data = pd.read_csv(data_csv)
     user_data, manager_data = train_test_split(data, test_size=0.2, random_state=77)
