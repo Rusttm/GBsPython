@@ -28,22 +28,37 @@ class MainWindow:
 
     def PrevPosition(self):
         pass
-        # if self.current_pos[0] == 0:
-        #     self.current_pos[0] = self.current_pos[1]
-        # else:
-        #     self.current_pos[0] -= 1
-        #
-        # i = self.current_pos[0]
-        # self.ClearFields()
-        # self.id_name.config(text=self.data[i][0])
-        # mangr_id = self.data[i][1]
-        # manager = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=mangr_id,
-        #                                                  tbl1_name='Departments', field1='manager_id',
-        #                                                  tbl2_name='Managers', field2='manager_id')
-        #
-        # self.manager_name.insert(0, manager[0][1])
-        # self.dep_name.insert(0, self.data[i][2])
-        # self.dep_address_name.insert(0, self.data[i][3])
+        if self.current_pos[0] == 0:
+            self.current_pos[0] = self.current_pos[1]
+        else:
+            self.current_pos[0] -= 1
+
+        i = self.current_pos[0]
+        self.ClearFields()
+        self.id_name.config(text=self.data[i][0])
+
+        # manager_id --> manager name
+        mangr_id = self.data[i][2]
+        manager = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=mangr_id,
+                                                         tbl1_name='Employees', field1='manager_id',
+                                                         tbl2_name='Managers', field2='manager_id')
+        self.manager_name.insert(0, manager[0][1])
+
+
+        # department_id --> department name
+        dep_id = self.data[i][3]
+        department = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=dep_id,
+                                                         tbl1_name='Employees', field1='department_id',
+                                                         tbl2_name='Departments', field2='department_id')
+        self.dep_name.insert(0, department[1])
+        self.user_name.insert(0, self.data[i][1])
+        self.phone_name.insert(0, self.data[i][4])
+        self.room_name.insert(0, self.data[i][6])
+        self.addres_name.insert(0, self.data[i][5])
+
+
+
+
 
     def NextPosition(self):
         pass
@@ -54,12 +69,13 @@ class MainWindow:
         self.ClearFields()
         i = self.current_pos[0]
         self.id_name.config(text=self.data[i][0])
+
         # manager_id --> manager name
         mangr_id = self.data[i][2]
         manager = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=mangr_id,
                                                          tbl1_name='Employees', field1='manager_id',
                                                          tbl2_name='Managers', field2='manager_id')
-        self.manager_name.insert(0, manager[i][1])
+        self.manager_name.insert(0, manager[0][1])
 
 
         # department_id --> department name
@@ -67,7 +83,10 @@ class MainWindow:
         department = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=dep_id,
                                                          tbl1_name='Employees', field1='department_id',
                                                          tbl2_name='Departments', field2='department_id')
-        self.dep_name.insert(0, department[i][1])
+        self.dep_name.insert(0, department[1])
+        self.user_name.insert(0, self.data[i][1])
+        self.phone_name.insert(0, self.data[i][4])
+        self.room_name.insert(0, self.data[i][6])
         self.addres_name.insert(0, self.data[i][5])
 
     def MainCanvas(self):
