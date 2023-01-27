@@ -2,9 +2,15 @@
 __pycache__/
 
 *$py.class
+# config ini
 *.ini
+# logger
+*.log
+
+
 # C extensions
 *.so
+
 
 # Distribution / packaging
 .Python
