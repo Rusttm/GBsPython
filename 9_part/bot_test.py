@@ -1,7 +1,7 @@
 import logging
 import configparser
 import os
-
+import candygame
 try:
     # get data from in file
     conf = configparser.ConfigParser()
@@ -43,11 +43,14 @@ class JohnBotGB():
         self.delete_msg_id = 0
         self.game_dict = dict({'noname': {'function': self.start, 'help': 'Игра не выбрана'},
                                'tictaс': {'function': self.GameTicTac, 'help': 'Введите координату'},
-                               'calc': {'function': self.GameCalc, 'help': 'Введите выражение'}})
+                               'candy': {'function': self.GameCandy, 'help': 'Сколько конфет возьмете?'},
+                               'calc': {'function': self.GameCalc, 'help': 'Введите выражение'}
+                               })
 
         self.commands_dict = dict({'/start': '-перезапуск бота',
                                    '/help': '- помощь',
                                    '/tictac': '-игра в крестики-нолики',
+                                   '/candy': '-игра в крестики-нолики',
                                    '/calc': 'решение математического выражения'})
         self.NewBot()
 
@@ -77,7 +80,11 @@ class JohnBotGB():
     async def echo(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Echo the user message."""
         logging.info(msg=f"message from: {update.message.chat.first_name}, text: {update.message.text} ")
-        await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
+        if self.current_gamer[update.message.from_user.id] != 'noname':
+            current_game = self.current_gamer[update.message.from_user.id]
+            # self.game_dict[current_game]['function']
+        else:
+            await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
                                         f"and you wrote {update.message.text}")
     async def GameTicTac(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictok game"""
@@ -86,10 +93,17 @@ class JohnBotGB():
 
         await update.message.reply_text("Игра крестики нолики закончена. Досвидания!")
 
+    async def GameCandy(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """start tictok game"""
+        self.current_gamer[update.message.from_user.id] = 'candy'
+
+        await update.message.reply_text("Сколько конфет возьмете?")
+
     async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictok game"""
         self.current_gamer[update.message.from_user.id] = 'calc'
         await update.message.reply_text("Введите выражение для вычисления")
+
 
 
 
