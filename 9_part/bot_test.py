@@ -30,7 +30,8 @@ from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandl
 
 # Enable logging
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO,
+    filename='bot.log', filemode='a'
 )
 logger = logging.getLogger(__name__)
 
@@ -53,7 +54,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
-    await update.message.reply_text(update.message.text)
+    logging.info(f"message from: {update.message.chat.first_name} text: {update.message.text} ")
+    await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
+                                    f"and you wrote {update.message.text}")
 
 
 def main() -> None:
