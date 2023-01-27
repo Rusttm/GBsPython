@@ -25,6 +25,7 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
         f"{TG_VER} version of this example, "
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
+
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
@@ -54,7 +55,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
-    logging.info(f"message from: {update.message.chat.first_name} text: {update.message.text} ")
+    logging.info(msg=f"message from: {update.message.chat.first_name}, text: {update.message.text} ")
     await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
                                     f"and you wrote {update.message.text}")
 
