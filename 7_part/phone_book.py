@@ -12,6 +12,7 @@ import dbmodule
 # initiate tkinter fields
 master = tk.Tk()
 
+
 # объявляем надписи
 id_sign = tk.Label(master, text="Id:")
 id_label = tk.Label(master, text="0")
