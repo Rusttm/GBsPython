@@ -60,7 +60,8 @@ class MainWindow:
         department = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=dep_id,
                                                          tbl1_name='Employees', field1='department_id',
                                                          tbl2_name='Departments', field2='department_id')
-        self.dep_name.insert(0, department[1])
+        print(department)
+        self.dep_name.insert(0, department[0][1])
         self.user_name.insert(0, self.data[i][1])
         self.phone_name.insert(0, self.data[i][4])
         self.room_name.insert(0, self.data[i][6])
@@ -93,7 +94,7 @@ class MainWindow:
         department = MysqlconnectionModule.LoadCrossFromSQL(select='name', value=dep_id,
                                                          tbl1_name='Employees', field1='department_id',
                                                          tbl2_name='Departments', field2='department_id')
-        self.dep_name.insert(0, department[1])
+        self.dep_name.insert(0, department[0][1])
         self.user_name.insert(0, self.data[i][1])
         self.phone_name.insert(0, self.data[i][4])
         self.room_name.insert(0, self.data[i][6])
