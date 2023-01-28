@@ -2,6 +2,7 @@ import logging
 import configparser
 import os
 import candygame
+import tictacgame
 try:
     # get data from in file
     conf = configparser.ConfigParser()
@@ -42,16 +43,16 @@ class JohnBotGB():
         self.current_gamer = dict() # 'user_id' : 'tictac', calc or false
         self.current_user_game = dict()
         self.delete_msg_id = 0
-        self.game_dict = dict({'nogame': {'function': self.start, 'help': 'Игра не выбрана'},
-                               'tictaс': {'function': self.GameTicTac, 'help': 'Введите координату'},
-                               'candy': {'function': self.GameCandy, 'help': 'Сколько конфет возьмете?'},
-                               'calc': {'function': self.GameCalc, 'help': 'Введите выражение'}
+        self.game_dict = dict({'nogame': {'function': self.start, 'help': 'Игра не выбрана', 'command': '/start'},
+                               'tictaс': {'function': self.GameTicTac, 'help': 'Введите координату', 'command': '/tictac'},
+                               'candy': {'function': self.GameCandy, 'help': 'Сколько конфет возьмете?', 'command': '/candy'},
+                               'calc': {'function': self.GameCalc, 'help': 'Введите выражение', 'command': '/calc'}
                                })
 
         self.commands_dict = dict({'/start': '-перезапуск бота',
                                    '/help': '- помощь',
                                    '/tictac': '-игра в крестики-нолики',
-                                   '/candy': '-игра в крестики-нолики',
+                                   '/candy': '-игра в конфетки',
                                    '/calc': 'решение математического выражения'})
         self.NewBot()
 
@@ -81,23 +82,27 @@ class JohnBotGB():
     async def echo(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Echo the user message."""
         logging.info(msg=f"message from: {update.message.chat.first_name}, text: {update.message.text} ")
-        if self.current_gamer[update.message.from_user.id] != 'nogame':
+        current_user_game = self.current_gamer[update.message.from_user.id]
+        if current_user_game != 'nogame':
             print(update.message.text)
             result = self.current_user_game[update.message.from_user.id].UserTurn(update.message.text)
             await update.message.reply_text(result[1])
             if result[0] == 'end':
                 self.current_gamer[update.message.from_user.id] = 'nogame'
-                await update.message.reply_text("Нажмите /start для выхода в главное меню")
-                await update.message.reply_text("Или нажмите /candy для новой игры")
+                await update.message.reply_text("Игра закончена нажмите /start для выхода в главное меню")
+                await update.message.reply_text(f"Или нажмите {self.game_dict[current_user_game]['command']} для новой игры")
         else:
             await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
                                         f"and you wrote {update.message.text}")
     async def GameTicTac(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """start tictok game"""
+        """start tictak game"""
         self.current_gamer[update.message.from_user.id] = 'tictaс'
-        await update.message.reply_text("Игра крестики нолики началась -Ваш ход")
+        self.current_user_game[update.message.from_user.id] = tictacgame.XOgame(user_name=update.message.from_user.id)
+        await update.message.reply_text("Игра крестики нолики началась. Поле:")
+        field = self.current_user_game[update.message.from_user.id].PrintField()
+        await update.message.reply_text(field)
+        await update.message.reply_text("Чем Вы будете играть? 'O' или 'X'")
 
-        await update.message.reply_text("Игра крестики нолики закончена. Досвидания!")
 
     async def GameCandy(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictak game"""

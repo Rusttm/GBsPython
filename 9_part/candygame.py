@@ -1,7 +1,10 @@
 """модуль для игры в конфетки с чатботом"""
 
+
 class CandyGame:
     def __init__(self, candy_num=123, user_name='unknown'):
+        import random
+        candy_num = random.randint(50, 200)
         self.candy_num = candy_num
         self.user_name = user_name
 
