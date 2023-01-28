@@ -110,7 +110,7 @@ class JohnBotGB():
         self.current_user_game[update.message.from_user.id] = candygame.CandyGame(user_name=update.message.from_user.id)
         start_msg = self.current_user_game[update.message.from_user.id].StartMessage()
         await update.message.reply_text(start_msg[1])
-        await update.message.reply_text("Сколько конфет возьмете?")
+        await update.message.reply_text("Сколько \U0001F36C возьмете?")
 
     async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictak game"""

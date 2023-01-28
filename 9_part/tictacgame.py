@@ -19,24 +19,24 @@ class XOgame():
         # return self.my_field_string
         # names_field = [['  _1__2__3_ '], ['a|', 'b|', 'c|']]
         # print(names_field[0][0])
-        header_string = '\ a   b   c \n'
+        header_string = ' a   b   c \n'
         result_string = header_string
         for i, elem in enumerate(self.my_field):
             for ii, x in enumerate(elem):
-                result_string += '|'
+                result_string += ''
                 if x==0:
-                    result_string += ' _ '
+                    result_string += '\U00002796'
                 elif x==-1:
-                    result_string += ' O '
+                    result_string += '\U00002B55'
 
                 elif x==1:
-                    result_string += ' X '
+                    result_string += '\U0000274C'
 
                 else:
                     result_string += f' {x} '
                 
                 if ii == 2:
-                    result_string += f'|{i+1}\n'
+                    result_string += f'{i+1}\n'
         return result_string
 
 
@@ -106,11 +106,11 @@ class XOgame():
         if coordinate == 'x':
             self.human_player = 1
             self.bot_player = -1
-            return ["continue", "Отлично, Вы играете 'X', Ваш ход"]
+            return ["continue", "Отлично, Вы играете \U0000274C, Ваш ход"] # крестики
         elif coordinate == 'o':
             self.human_player = -1
             self.bot_player = 1
-            return ["continue", "Отлично, Вы играете 'O', Ваш ход"]
+            return ["continue", "Отлично, Вы играете '\U00002B55', Ваш ход"] # нолики
         elif not self.human_player:
             return ["continue", "Чем Вы будете играть? 'O' или 'X'"]
 

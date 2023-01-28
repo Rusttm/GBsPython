@@ -9,7 +9,7 @@ class CandyGame:
         self.user_name = user_name
 
     def StartMessage(self):
-        return ["continue", f"Начнем с {self.candy_num} конфет"]
+        return ["continue", f"Начнем с {self.candy_num} \U0001F36C"]
 
     def CandyGameWin(self, num: int, ) -> int:
         '''возвращает лучшее решение или 28'''
@@ -25,15 +25,15 @@ class CandyGame:
             return ["continue", "введите число до 28"]
 
         if num > 28 or num > self.candy_num:
-            return ["continue", "возьмите, пожалуйста, меньше конфет (до 28)"]
+            return ["continue", "возьмите, пожалуйста, меньше \U0001F36C (до 28)"]
         else:
             self.candy_num -= num
         bot_take = self.CandyGameWin(self.candy_num)
         self.candy_num -= bot_take
         if self.candy_num == 0:
-            return ["end", f"Я забрал {bot_take} конфет и выиграл!"]
+            return ["end", f"Я забрал {bot_take} \U0001F36C и выиграл!"]
         else:
-            return ["continue", f"Я забрал {bot_take} конфет, осталось {self.candy_num}"]
+            return ["continue", f"Я забрал {bot_take} \U0001F36C, осталось {self.candy_num}"]
 
 
 
