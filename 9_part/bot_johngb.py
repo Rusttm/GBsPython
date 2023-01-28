@@ -3,6 +3,7 @@ import configparser
 import os
 import candygame
 import tictacgame
+import calcgame
 try:
     # get data from in file
     conf = configparser.ConfigParser()
@@ -27,8 +28,8 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
 
-from telegram import ForceReply, Update
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
+from telegram import ForceReply, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, CallbackQueryHandler
 
 # Enable logging
 logging.basicConfig(
@@ -54,6 +55,10 @@ class JohnBotGB():
                                    '/tictac': '-игра в крестики-нолики',
                                    '/candy': '-игра в конфетки',
                                    '/calc': 'решение математического выражения'})
+        self.keyboard = [['7', '8', '9'],
+                         ['4', '5', '6'],
+                         ['1', '2', '3'],
+                         ['0']]
         self.NewBot()
 
     # Define a few command handlers. These usually take the two arguments update and
@@ -69,6 +74,32 @@ class JohnBotGB():
         )
         msg = '\n'.join([str(f"{key}: {value}") for key, value in self.commands_dict.items()])
         await update.message.reply_html(f"Основные функции:\n {msg}", reply_markup=ForceReply(selective=True))
+    # async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    #     """Sends a message with three inline buttons attached."""
+    #     keyboard = [
+    #         [
+    #             InlineKeyboardButton("Start", callback_data="/start"),
+    #             InlineKeyboardButton("Help", callback_data="/help"),
+    #         ],
+    #         [InlineKeyboardButton("КрестикиНолики", callback_data="/tictac")],
+    #         [InlineKeyboardButton("Конфетки", callback_data="/candy")],
+    #         [InlineKeyboardButton("Калькулятор", callback_data="/calc")],
+    #     ]
+    #
+    #     reply_markup = InlineKeyboardMarkup(keyboard)
+    #     await update.message.reply_text("Please choose:", reply_markup=reply_markup)
+
+    # async def button(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    #     """Parses the CallbackQuery and updates the message text."""
+    #     query = update.callback_query
+    #
+    #     # CallbackQueries need to be answered, even if no notification to the user is needed
+    #     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
+    #     await query.answer()
+    #     if query.data == '/start':
+    #         self.start(update= Update, context= ContextTypes.DEFAULT_TYPE)
+    #     # await query.edit_message_text(text=f"Selected option: {query.data}")
+
 
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -115,6 +146,7 @@ class JohnBotGB():
     async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictak game"""
         self.current_gamer[update.message.from_user.id] = 'calc'
+        self.current_user_game[update.message.from_user.id] = calcgame.CalcGame(user_name=update.message.from_user.id)
         await update.message.reply_text("Введите выражение для вычисления")
 
 
@@ -135,6 +167,8 @@ class JohnBotGB():
         application.add_handler(CommandHandler("calc", self.GameCalc))
         application.add_handler(CommandHandler("candy", self.GameCandy))
         application.add_handler(CommandHandler("stop", self.start))
+
+        # application.add_handler(CallbackQueryHandler(self.button))
         # on non command i.e message - echo the message on Telegram
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.echo))
 
