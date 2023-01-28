@@ -1,0 +1,20 @@
+Update(message=Message(
+                        channel_chat_created=False,
+                        chat=Chat(
+                                    first_name='John', id=731370983,
+                                    last_name='Lennon', type=<ChatType.PRIVATE>,
+                                    username='rusttm7777'),
+                        date=datetime.datetime(2023, 1, 27, 14, 11, 59, tzinfo=<UTC>),
+                        delete_chat_photo=False,
+                        from_user=User(
+                                       first_name='John',
+                                       id=731370983,
+                                       is_bot=False,
+                                       language_code='en',
+                                       last_name='Lennon',
+                                       username='rusttm7777'),
+                        group_chat_created=False,
+                        message_id=59,
+                        supergroup_chat_created=False,
+                        text='Hfgh'),
+         update_id=734530793)
