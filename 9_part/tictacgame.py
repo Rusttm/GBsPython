@@ -81,10 +81,10 @@ class XOgame():
         # ищем победителя
         if ( winer == 3 * self.human_player ):
             # print('You WIN!!!')
-            return ["end", 'You WIN!!!']
+            return ["end", 'You WIN!!!\U0001F973']
         elif ( winer == 3 * self.bot_player):
             # print('Your opponent win!')
-            return ["end", 'I win!']
+            return ["end", 'I win!\U0001F973']
 
         # проверяем окончание игры
         is_filled = 0
@@ -94,7 +94,7 @@ class XOgame():
                     is_filled += 1
         if is_filled == 9:
             # print('End Game!')
-            return ["end", 'Nobody win. End Game!']
+            return ["end", 'Nobody win\U0001F91D End Game!']
 
         return ["continue", "Next turn"]
     
@@ -110,7 +110,7 @@ class XOgame():
         elif coordinate == 'o':
             self.human_player = -1
             self.bot_player = 1
-            return ["continue", "Отлично, Вы играете '\U00002B55', Ваш ход"] # нолики
+            return ["continue", "Отлично, Вы играете \U00002B55, Ваш ход"] # нолики
         elif not self.human_player:
             return ["continue", "Чем Вы будете играть? 'O' или 'X'"]
 
@@ -123,7 +123,6 @@ class XOgame():
 
                 if win[0] == "continue":
                     self.BotTurn()
-
                     return ["continue", f"{self.PrintField()}"]
                 else:
                     # return self.CheckWin()
@@ -137,7 +136,7 @@ class XOgame():
             for i in range(3):
                 for ii in range(3):
                     if self.my_field[i][ii] == 0:
-                        if self.rand.randint(0,9) == 1:
+                        if self.rand.randint(0, 9) == 1:
                             self.my_field[i][ii] = self.bot_player
                             # print('Бот походил:')
                             # self.PrintField()

@@ -31,7 +31,7 @@ class CandyGame:
         bot_take = self.CandyGameWin(self.candy_num)
         self.candy_num -= bot_take
         if self.candy_num == 0:
-            return ["end", f"Я забрал {bot_take} \U0001F36C и выиграл!"]
+            return ["end", f"Я забрал {bot_take} \U0001F36C и выиграл!\U0001F973"]
         else:
             return ["continue", f"Я забрал {bot_take} \U0001F36C, осталось {self.candy_num}\U0001F36C"]
 
