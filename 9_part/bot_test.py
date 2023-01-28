@@ -40,8 +40,9 @@ class JohnBotGB():
     def __init__(self):
         self.project = False
         self.current_gamer = dict() # 'user_id' : 'tictac', calc or false
+        self.current_user_game = dict()
         self.delete_msg_id = 0
-        self.game_dict = dict({'noname': {'function': self.start, 'help': 'Игра не выбрана'},
+        self.game_dict = dict({'nogame': {'function': self.start, 'help': 'Игра не выбрана'},
                                'tictaс': {'function': self.GameTicTac, 'help': 'Введите координату'},
                                'candy': {'function': self.GameCandy, 'help': 'Сколько конфет возьмете?'},
                                'calc': {'function': self.GameCalc, 'help': 'Введите выражение'}
@@ -59,7 +60,7 @@ class JohnBotGB():
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Send a message and restart bot when the command /start is issued."""
-        self.current_gamer[update.message.from_user.id] = 'noname'
+        self.current_gamer[update.message.from_user.id] = 'nogame'
         user = update.effective_user
         await update.message.reply_html(
             rf"Hi {user.mention_html()}!",
@@ -72,7 +73,7 @@ class JohnBotGB():
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Send a message when the command /help is issued."""
 
-        temp_msg = self.game_dict.get(self.current_gamer[update.message.from_user.id], self.game_dict['noname'])['help']
+        temp_msg = self.game_dict.get(self.current_gamer[update.message.from_user.id], self.game_dict['nogame'])['help']
         await update.message.delete()
         await update.message.reply_text(f"{temp_msg}")
 
@@ -80,9 +81,14 @@ class JohnBotGB():
     async def echo(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Echo the user message."""
         logging.info(msg=f"message from: {update.message.chat.first_name}, text: {update.message.text} ")
-        if self.current_gamer[update.message.from_user.id] != 'noname':
-            current_game = self.current_gamer[update.message.from_user.id]
-            # self.game_dict[current_game]['function']
+        if self.current_gamer[update.message.from_user.id] != 'nogame':
+            print(update.message.text)
+            result = self.current_user_game[update.message.from_user.id].UserTurn(update.message.text)
+            await update.message.reply_text(result[1])
+            if result[0] == 'end':
+                self.current_gamer[update.message.from_user.id] = 'nogame'
+                await update.message.reply_text("Нажмите /start для выхода в главное меню")
+                await update.message.reply_text("Или нажмите /candy для новой игры")
         else:
             await update.message.reply_text(f"Hi {update.message.from_user.first_name}({update.message.from_user.id}) "
                                         f"and you wrote {update.message.text}")
@@ -94,13 +100,15 @@ class JohnBotGB():
         await update.message.reply_text("Игра крестики нолики закончена. Досвидания!")
 
     async def GameCandy(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """start tictok game"""
+        """start tictak game"""
         self.current_gamer[update.message.from_user.id] = 'candy'
-
+        self.current_user_game[update.message.from_user.id] = candygame.CandyGame(user_name=update.message.from_user.id)
+        start_msg = self.current_user_game[update.message.from_user.id].StartMessage()
+        await update.message.reply_text(start_msg[1])
         await update.message.reply_text("Сколько конфет возьмете?")
 
     async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """start tictok game"""
+        """start tictak game"""
         self.current_gamer[update.message.from_user.id] = 'calc'
         await update.message.reply_text("Введите выражение для вычисления")
 
@@ -120,6 +128,8 @@ class JohnBotGB():
         application.add_handler(CommandHandler("help", self.help_command))
         application.add_handler(CommandHandler("tictac", self.GameTicTac))
         application.add_handler(CommandHandler("calc", self.GameCalc))
+        application.add_handler(CommandHandler("candy", self.GameCandy))
+        application.add_handler(CommandHandler("stop", self.start))
         # on non command i.e message - echo the message on Telegram
         application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.echo))
 
