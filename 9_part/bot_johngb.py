@@ -55,11 +55,8 @@ class JohnBotGB():
                                    '/tictac': '-игра в крестики-нолики',
                                    '/candy': '-игра в конфетки',
                                    '/calc': 'решение математического выражения'})
-        self.keyboard = [['7', '8', '9'],
-                         ['4', '5', '6'],
-                         ['1', '2', '3'],
-                         ['0']]
         self.NewBot()
+
 
     # Define a few command handlers. These usually take the two arguments update and
 # context.
@@ -74,31 +71,8 @@ class JohnBotGB():
         )
         msg = '\n'.join([str(f"{key}: {value}") for key, value in self.commands_dict.items()])
         await update.message.reply_html(f"Основные функции:\n {msg}", reply_markup=ForceReply(selective=True))
-    # async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    #     """Sends a message with three inline buttons attached."""
-    #     keyboard = [
-    #         [
-    #             InlineKeyboardButton("Start", callback_data="/start"),
-    #             InlineKeyboardButton("Help", callback_data="/help"),
-    #         ],
-    #         [InlineKeyboardButton("КрестикиНолики", callback_data="/tictac")],
-    #         [InlineKeyboardButton("Конфетки", callback_data="/candy")],
-    #         [InlineKeyboardButton("Калькулятор", callback_data="/calc")],
-    #     ]
-    #
-    #     reply_markup = InlineKeyboardMarkup(keyboard)
-    #     await update.message.reply_text("Please choose:", reply_markup=reply_markup)
 
-    # async def button(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    #     """Parses the CallbackQuery and updates the message text."""
-    #     query = update.callback_query
-    #
-    #     # CallbackQueries need to be answered, even if no notification to the user is needed
-    #     # Some clients may have trouble otherwise. See https://core.telegram.org/bots/api#callbackquery
-    #     await query.answer()
-    #     if query.data == '/start':
-    #         self.start(update= Update, context= ContextTypes.DEFAULT_TYPE)
-    #     # await query.edit_message_text(text=f"Selected option: {query.data}")
+
 
 
 
@@ -108,7 +82,6 @@ class JohnBotGB():
         temp_msg = self.game_dict.get(self.current_gamer[update.message.from_user.id], self.game_dict['nogame'])['help']
         await update.message.delete()
         await update.message.reply_text(f"{temp_msg}")
-
 
     async def echo(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Echo the user message."""
@@ -134,7 +107,6 @@ class JohnBotGB():
         await update.message.reply_text(field)
         await update.message.reply_text("Чем Вы будете играть? 'O' или 'X'")
 
-
     async def GameCandy(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start tictak game"""
         self.current_gamer[update.message.from_user.id] = 'candy'
@@ -158,22 +130,21 @@ class JohnBotGB():
         """Start the bot."""
 
         # Create the Application and pass it your bot's token.
-        application = Application.builder().token(TOKEN).build()
+        self.application = Application.builder().token(TOKEN).build()
 
         # on different commands - answer in Telegram
-        application.add_handler(CommandHandler("start", self.start))
-        application.add_handler(CommandHandler("help", self.help_command))
-        application.add_handler(CommandHandler("tictac", self.GameTicTac))
-        application.add_handler(CommandHandler("calc", self.GameCalc))
-        application.add_handler(CommandHandler("candy", self.GameCandy))
-        application.add_handler(CommandHandler("stop", self.start))
+        self.application.add_handler(CommandHandler("start", self.start))
+        self.application.add_handler(CommandHandler("help", self.help_command))
+        self.application.add_handler(CommandHandler("tictac", self.GameTicTac))
+        self.application.add_handler(CommandHandler("calc", self.GameCalc))
+        self.application.add_handler(CommandHandler("candy", self.GameCandy))
+        self.application.add_handler(CommandHandler("stop", self.start))
 
-        # application.add_handler(CallbackQueryHandler(self.button))
         # on non command i.e message - echo the message on Telegram
-        application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.echo))
+        self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.echo))
 
         # Run the bot until the user presses Ctrl-C
-        application.run_polling()
+        self.application.run_polling()
 
 
 
