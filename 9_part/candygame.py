@@ -22,12 +22,14 @@ class CandyGame:
         try:
             num = int(num_str)
         except:
-            return ["continue", "введите число до 28"]
+            return ["continue", "введите число от 0 до 28"]
 
         if num > 28 or num > self.candy_num:
             return ["continue", "возьмите, пожалуйста, меньше \U0001F36C (до 28)"]
         else:
             self.candy_num -= num
+        if self.candy_num == 0:
+            return ["end", f"Вы выиграли! \U0001F92F  Поздравляю!"]
         bot_take = self.CandyGameWin(self.candy_num)
         self.candy_num -= bot_take
         if self.candy_num == 0:
