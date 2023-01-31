@@ -22,7 +22,7 @@ def CalcList(expr_list: list) -> str:
             x = expr_list.pop(i-1)
             b = expr_list.pop(i-1)
             expr_list.insert(i-1, CalcTwo(a,x,b))
-    return ''.join(expr_list)
+    return expr_list
 
 
 def CalcHooks(expr_list: list) -> float:
@@ -54,7 +54,7 @@ def CalcTwo(a:str,x:str,b:str) -> float:
     if x == '-':
         return str(float(a)-float(b))
 
-
-print(CalcHooks(EqReader(s)))
+if '__name__' == '__main__':
+    print(CalcHooks(EqReader(s)))
 
     
