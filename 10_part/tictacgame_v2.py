@@ -18,29 +18,7 @@ class XOgame():
         
     def PrintField(self):
         return self.my_field
-        # names_field = [['  _1__2__3_ '], ['a|', 'b|', 'c|']]
-        # print(names_field[0][0])
-        # header_string = ' a   b   c \n'
 
-        # result_string = header_string
-        # for i, elem in enumerate(self.my_field):
-        #     for ii, x in enumerate(elem):
-        #         result_string += ''
-        #         if x==0:
-        #             result_string += '\U00002796'
-        #
-        #         elif x==-1:
-        #             result_string += '\U00002B55'
-        #
-        #         elif x==1:
-        #             result_string += '\U0000274C'
-        #
-        #         else:
-        #             result_string += f' {x} '
-        #
-        #         if ii == 2:
-        #             result_string += f'{i+1}\n'
-        # return result_string
 
 
     def ChangeValue(self, coord='a1', value=1) -> bool:

@@ -224,7 +224,7 @@ class JohnBotGB():
         await self.msg_update.message.reply_text("Поле:", reply_markup=reply_markup)
         self.application.add_handler(CallbackQueryHandler(self.button))
 
-    async def GameTicTac(self, query_data = 'cross'):
+    async def GameTicTac(self, query_data='cross'):
         """start tictak game"""
         result = ['halt', 'Unknow command']
 
