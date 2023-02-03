@@ -26,9 +26,8 @@ class ExpressionResolver:
         self.roots = []
         self.minmax = {'min': [], 'max': []}
         self.posneg_func = {'pos': [], 'neg': []}
+        self.growfall_func = {'grow': [], 'fall': []}
 
-        self.grow_func = []
-        self.decrease_func = []
 
 
 
@@ -153,11 +152,20 @@ class ExpressionResolver:
     def func_minmax_resolver(self):
         """ находит производную и по ней ищет минимумы и максимумы """
         left_value = self.func_value(x0=self.left, diff=True)
-        y_diff_is_positive = left_value > 0
+        y_diff_is_positive = left_value >= 0
         # (True, False) - максимальные значения
         # (False, True) - минимальные значения
         left_accuracy = self.left*10**(self.accuracy)
         right_accuracy = self.right*10**(self.accuracy)
+        grow = 0
+        fall = 0
+        if y_diff_is_positive:
+            grow = self.left
+            fall = 0
+        else:
+            grow = 0
+            fall = self.left
+
         for x_accuracy in range(left_accuracy, right_accuracy, 1):
             x = x_accuracy*10**(-self.accuracy)
             y_diff = self.func_value(x, diff=True)
@@ -165,13 +173,19 @@ class ExpressionResolver:
                 y = self.func_value(x0=x)
                 # self.minmax['max'].append([round(x, self.accuracy), round(y, self.accuracy)])
                 self.minmax['max'].append((round(x, self.accuracy), round(y, self.accuracy)))
+                self.growfall_func['grow'].append((round(grow, self.accuracy), round(x, self.accuracy)))
+                grow = 0
+                fall = x
             elif (y_diff_is_positive, y_diff > 0) == (False, True):
                 y = self.func_value(x0=x)
                 # self.minmax['min'].append([round(x, self.accuracy), round(y, self.accuracy)])
                 self.minmax['min'].append((round(x, self.accuracy), round(y, self.accuracy)))
+                self.growfall_func['fall'].append((round(fall, self.accuracy), round(x, self.accuracy)))
+                grow = x
+                fall = 0
 
             y_diff_is_positive = y_diff > 0
-
+        self.result['function_grow'] = self.growfall_func
         self.result['minmax'] = self.minmax
 
 
