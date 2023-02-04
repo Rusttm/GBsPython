@@ -371,7 +371,7 @@ class ExpressionResolver:
                 for plot2 in graph_f_diff:
                     pts2 = plot2.get_points()
                     plt.plot(pts2[0], pts2[1])
-                plt.title(f'Derivative: \n{self.dif_expr}')
+                plt.title(f'Function: \n{self.corrected_expr}\n and \n Derivative ({self.dif_expr})')
                 plt.savefig(f'{user_name}_diff.png')
 
 
