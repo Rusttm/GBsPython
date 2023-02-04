@@ -180,6 +180,13 @@ class JohnBotGB():
             result = self.current_user_game[update.message.from_user.id].UserTurn(update.message.text)
             await update.message.reply_text(result[1])
             if result[0] == 'end':
+                # высылаем картинку если калькулятор сработал
+                if current_user_game == 'calc':
+                    chat_id = update.message['chat']['id']
+                    await context.bot.send_photo(chat_id=chat_id,
+                                                 photo=open(f'{update.message.from_user.id}.png', 'rb'),
+                                                 filename=f'{update.message.from_user.id}.png')
+
                 self.current_gamer[update.message.from_user.id] = 'nogame'
                 await update.message.reply_text("Игра закончена!")
                 await self.start(update, context)
