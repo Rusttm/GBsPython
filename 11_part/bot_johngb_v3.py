@@ -7,7 +7,7 @@ import configparser
 import os
 import candygame
 import tictacgame_v2
-import expr_resolver_bot
+import expr_resolver_4bot
 try:
     # get data from in file
     conf = configparser.ConfigParser()
@@ -54,7 +54,7 @@ class JohnBotGB():
         self.game_dict = dict({'nogame': {'function': self.start, 'help': 'Игра не выбрана', 'command': '/start'},
                                'tictaс': {'function': self.GameTicTac, 'help': 'Введите координату', 'command': '/tictac'},
                                'candy': {'function': self.GameCandy, 'help': 'Сколько конфет возьмете?', 'command': '/candy'},
-                               'calc': {'function': self.GameCalc, 'help': 'Введите выражение', 'command': '/calc'}
+                               'calc': {'function': self.GameCalcStart, 'help': 'Введите выражение', 'command': '/calc'}
                                })
 
         self.commands_dict = dict({'/start': '-перезапуск бота',
@@ -125,7 +125,7 @@ class JohnBotGB():
             elif query_data == '/candy':
                 await self.GameCandy(self.msg_update, self.msg_context)
             elif query_data == '/calc':
-                await self.GameCalc(self.msg_update, self.msg_context)
+                await self.GameCalcStart(self.msg_update, self.msg_context)
         elif query_game == 'tictac':
             await self.GameTicTac(query_data=query_data)
 
@@ -279,7 +279,7 @@ class JohnBotGB():
     async def GameCalcStart(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """start gamecalc game"""
         self.current_gamer[update.message.from_user.id] = 'calc'
-        self.current_user_game[update.message.from_user.id] = expr_resolver_bot.ExpressionResolver(user_name=update.message.from_user.id)
+        self.current_user_game[update.message.from_user.id] = expr_resolver_4bot.ExpressionResolver(user_name=update.message.from_user.id)
         await update.message.reply_text("Введите выражение для вычисления")
 
     # async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -303,7 +303,7 @@ class JohnBotGB():
         self.application.add_handler(CommandHandler("start", self.start))
         self.application.add_handler(CommandHandler("help", self.help_command))
         self.application.add_handler(CommandHandler("tictac", self.GameTicTac))
-        self.application.add_handler(CommandHandler("calc", self.GameCalc))
+        self.application.add_handler(CommandHandler("calc", self.GameCalcStart))
         self.application.add_handler(CommandHandler("candy", self.GameCandy))
         self.application.add_handler(CommandHandler("stop", self.start))
 

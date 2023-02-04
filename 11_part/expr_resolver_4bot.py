@@ -13,15 +13,18 @@
 
 """
 
-from math import *
+# from math import *
 import sympy
 from sympy.plotting import plot
+from sympy import *
+from sympy.abc import x
+from sympy import Symbol, solve
 
 class ExpressionResolver:
 
     def __init__(self, user_name='1', expression_str='x*sin(x)', interval=(-10, 10), accuracy=3):
         self.user_name = user_name
-        self.queue = ['accuracy', 'range', 'expression']
+        self.queue = 4 # ['accuracy', 'range', 'expression']
         self.input_expression_str = expression_str
         self.left = min(interval)
         self.right = max(interval)
@@ -32,9 +35,11 @@ class ExpressionResolver:
         self.minmax = {'min': [], 'max': []}
         self.posneg_func = {'pos': [], 'neg': []}
         self.growfall_func = {'grow': [], 'fall': []}
+        # self.func_value = lambdify(x, self.input_expression_str)
+
 
     def UserTurn(self, command=''):
-        if self.queue == 3:
+        if self.queue == 4:  # выражение или функция
             self.input_expression_str = command
             try:   # выдаст ошибку, если не cможет конвертировать строку
                 self.format_expression()
@@ -46,41 +51,64 @@ class ExpressionResolver:
                     except Exception as e:
                         print(e)
                         return ["continue", f"Выражение {self.input_expression_str} не корректно"]
-                self.queue.pop()
-                return ["continue", f"Введите интервал: (-1,1)"]
+                self.queue -= 1
+                return ["continue", f"Введите начало интервала"]
             except Exception as e:
                 print(e)
                 self.input_expression_str = 'x*sin(x)'
                 return ["continue", f"Выражение {self.input_expression_str} не распознано, введите еще раз"]
-        elif self.queue == 2:
+        elif self.queue == 3: # начало интервала
             try:
-                self.left = min(command)
-                self.right = max(command)
-                self.queue.pop()
-                return ["continue", f"Интервал {self.left} : {self.right} задан, введите точность: 2"]
+                self.left = int(command)
+                self.queue -= 1
+                return ["continue", f"Интервал слева {self.left}, введите интервал справа"]
+            except Exception as e:
+                print(e)
+                self.input_expression_str = 'x*sin(x)'
+                return ["continue", f"Интервал слева {command} не распознан, введите еще раз"]
+        elif self.queue == 2: # конец интервала
+            try:
+                self.right = int(command)
+                if self.right < self.left:
+                    self.right, self.left = self.left, self.right
+                self.queue -= 1
+                return ["continue", f"Интервал {self.left}:{self.right} задан, введите точность: 2"]
             except Exception as e:
                 print(e)
                 self.input_expression_str = 'x*sin(x)'
                 return ["continue", f"Интервал {command} не распознан, введите еще раз"]
+
+
         elif self.queue == 1:
             try:
                 self.accuracy = int(command)
-                self.queue.pop()
+                self.queue -= 1
             except Exception as e:
                 print(e)
                 self.accuracy = 3
                 return ["continue", f"Точность {command} не определена, введите еще раз"]
 
-        else:
-            return self.resolve()
+            try:
+                answer = self.resolve()
+                self.draw_expression(self.user_name)
+                return answer
+
+            except Exception as e:
+                print(e)
+                self.accuracy = 3
+                return ["end", f"Простите, не могу решить {self.corrected_expr}"]
+
 
 
     def resolve(self):
-
+        # убрать для бота
+        # self.is_function = True
+        # self.format_expression()
+        #
 
         if not self.is_function:   # если это не функция возвращаем результат выражения
             try:
-                return ["end", f"Выражение {self.corrected_expr} = {round(eval(self.corrected_expr), self.accuracy)}"]
+                return ["end", f"Выражение {self.corrected_expr} = {round(solve(self.corrected_expr), self.accuracy)}"]
             except Exception as e:
                 print(e)
                 return ["end", f"Выражение {self.input_expression_str} не корректно"]
@@ -110,7 +138,7 @@ class ExpressionResolver:
 
 
 
-            return ["end", f"Решение {self.result} "]
+            return ["end", f"{self.answer_formatting()} "]
 
 
     def format_expression(self):
@@ -119,6 +147,7 @@ class ExpressionResolver:
         multy = ['*', '/', '(', ')']
         symbols = [char for char in 'xabcdefghijklmnopqrstuvwyz']
         corrected_expr = ''
+        self.input_expression_str = self.input_expression_str.lower()
         for char in self.input_expression_str:
             if char == ' ':
                 continue
@@ -143,16 +172,9 @@ class ExpressionResolver:
                 self.is_function = True
                 break
 
-    def func_value(self, x0=0, diff=False):
-        """ находит значение уравнения в заданной точке """
-        x = x0
-        if diff:
-            return round(eval(self.dif_expr), self.accuracy)
-        else:
-            return round(eval(self.corrected_expr), self.accuracy)
-
     def func_roots_resolver(self):
-        y_is_positive = self.func_value(self.left) >= 0
+        temp = self.func_value(self.left)
+        y_is_positive = temp >= 0
         left_accuracy = self.left*10**(self.accuracy)
         right_accuracy = self.right*10**(self.accuracy)
         if y_is_positive:
@@ -161,7 +183,7 @@ class ExpressionResolver:
         else:
             neg = self.left
             pos = 0
-        for x_accuracy in range(left_accuracy, right_accuracy, 1):
+        for x_accuracy in range(left_accuracy, right_accuracy+1, 1):
             x = x_accuracy*10**(-self.accuracy)
             y = self.func_value(x)
             if (y_is_positive) ^ (y > 0):
@@ -176,6 +198,15 @@ class ExpressionResolver:
                     self.posneg_func['neg'].append((round(neg, self.accuracy), round(x, self.accuracy)))
                     neg = 0
                     pos = x
+        # if pos:
+        #     self.posneg_func['pos'].append((round(pos, self.accuracy), round(x, self.accuracy)))
+        #     pos = 0
+        #     neg = x
+        # elif neg:
+        #     self.posneg_func['neg'].append((round(neg, self.accuracy), round(x, self.accuracy)))
+        #     neg = 0
+        #     pos = x
+
 
         self.result['roots'] = self.roots
         self.result['function+_'] = self.posneg_func
@@ -185,11 +216,14 @@ class ExpressionResolver:
         x = sympy.Symbol('x')
         self.sympy_dif_expr = sympy.diff(self.sympy_expr, x)
         self.dif_expr = str(sympy.diff(self.sympy_expr, x))
+        self.func_value = lambdify(x, self.sympy_expr)
+        self.func_diff_value = lambdify(x, self.sympy_dif_expr)
 
 
     def func_minmax_resolver(self):
         """ находит производную и по ней ищет минимумы и максимумы """
-        left_value = self.func_value(x0=self.left, diff=True)
+
+        left_value = self.func_diff_value(self.left)
         y_diff_is_positive = left_value >= 0
         # (True, False) - максимальные значения
         # (False, True) - минимальные значения
@@ -197,49 +231,143 @@ class ExpressionResolver:
         right_accuracy = self.right*10**(self.accuracy)
         grow = 0
         fall = 0
+        # крайняя левая точка
+        y = self.func_value(left_value)
         if y_diff_is_positive:
             grow = self.left
             fall = 0
+            self.minmax['min'].append((round(left_value, self.accuracy), round(y, self.accuracy)))
         else:
             grow = 0
             fall = self.left
+            self.minmax['max'].append((round(left_value, self.accuracy), round(y, self.accuracy)))
 
-        for x_accuracy in range(left_accuracy, right_accuracy, 1):
+        for x_accuracy in range(left_accuracy, right_accuracy+1, 1):
             x = x_accuracy*10**(-self.accuracy)
-            y_diff = self.func_value(x, diff=True)
+            y_diff = self.func_diff_value(x)
             if (y_diff_is_positive, y_diff > 0) == (True, False):
-                y = self.func_value(x0=x)
+                y = self.func_value(x)
                 # self.minmax['max'].append([round(x, self.accuracy), round(y, self.accuracy)])
                 self.minmax['max'].append((round(x, self.accuracy), round(y, self.accuracy)))
                 self.growfall_func['grow'].append((round(grow, self.accuracy), round(x, self.accuracy)))
                 grow = 0
                 fall = x
             elif (y_diff_is_positive, y_diff > 0) == (False, True):
-                y = self.func_value(x0=x)
+                y = self.func_value(x)
                 # self.minmax['min'].append([round(x, self.accuracy), round(y, self.accuracy)])
                 self.minmax['min'].append((round(x, self.accuracy), round(y, self.accuracy)))
                 self.growfall_func['fall'].append((round(fall, self.accuracy), round(x, self.accuracy)))
                 grow = x
                 fall = 0
-
             y_diff_is_positive = y_diff > 0
+
+        # крайняя правая точка
+        y = self.func_value(x)
+        if grow:
+            self.minmax['max'].append((round(x, self.accuracy), round(y, self.accuracy)))
+            self.growfall_func['grow'].append((round(grow, self.accuracy), round(x, self.accuracy)))
+        else:
+            self.minmax['min'].append((round(x, self.accuracy), round(y, self.accuracy)))
+            self.growfall_func['fall'].append((round(fall, self.accuracy), round(x, self.accuracy)))
+
         self.result['function_grow'] = self.growfall_func
         self.result['minmax'] = self.minmax
 
 
-    def draw_expression(self, name='sympy_img'):
-        # sympy.init_printing()
-        x = sympy.Symbol('x')
-        graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title='Function')
-        graph.save(f'{self.user_name}.png')
-        graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title='Derivative')
-        graph.save(f'{self.user_name}_diff.png')
+    def answer_formatting(self):
+        result_string = 'Решение:\n'
+        if self.result['roots'] != []:
+            result_string += 'Корни уравнения f(x)=0: '
+            for i, elem in enumerate(self.result['roots']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'x{i}={elem}'
+            result_string += '\n'
+        else:
+            result_string += 'Корней нет\n'
 
-if '__name__' == '__main__':
+        if self.result['minmax']['min'] != []:
+            result_string += 'Минимумы функции f(x): '
+            for i, elem in enumerate(self.result['minmax']['min']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'x{i}={elem[0]} y{i}={elem[1]}'
+            result_string += '\n'
+        else:
+            result_string += 'Минимумов нет\n'
+
+        if self.result['minmax']['max'] != []:
+            result_string += 'Максимумы функции f(x): '
+            for i, elem in enumerate(self.result['minmax']['max']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'x{i}={elem[0]} y{i}={elem[1]}'
+            result_string += '\n'
+        else:
+            result_string += 'Максимумов нет\n'
+
+        if self.result['function+_']['pos'] != []:
+            result_string += 'Функция f(x) положительна на отрезках: '
+            for i, elem in enumerate(self.result['function+_']['pos']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'({elem[0]}:{elem[1]})'
+            result_string += '\n'
+        else:
+            result_string += 'Функция не положительна \n'
+
+        if self.result['function+_']['neg'] != []:
+            result_string += 'Функция f(x) отрицательна на отрезках: '
+            for i, elem in enumerate(self.result['function+_']['neg']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'({elem[0]}:{elem[1]})'
+            result_string += '\n'
+        else:
+            result_string += 'Функция не отрицательна \n'
+
+        if self.result['function_grow']['grow'] != []:
+            result_string += 'Функция f(x) растет на отрезках: '
+            for i, elem in enumerate(self.result['function_grow']['grow']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'({elem[0]}:{elem[1]})'
+            result_string += '\n'
+        else:
+            result_string += 'Функция не растет \n'
+
+        if self.result['function_grow']['fall'] != []:
+            result_string += 'Функция f(x) падает на отрезках: '
+            for i, elem in enumerate(self.result['function_grow']['fall']):
+                if i != 0:
+                    result_string += ', '
+                result_string += f'({elem[0]}:{elem[1]})'
+            result_string += '\n'
+        else:
+            result_string += 'Функция не падает\n'
+
+        return result_string
+
+    def draw_expression(self, name='sympy_img'):
+        try:
+            # sympy.init_printing()
+            user_name = str(self.user_name)
+            x = sympy.Symbol('x')
+            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title='Function')
+            graph.save(f'{user_name}.png')
+            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title='Derivative')
+            graph.save(f'{user_name}_diff.png')
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+if __name__ == '__main__':
     my_expression_str = '-12x^4*sin(cos(x)) - 18x^3+5x^2 + 10x - 30'
     # my_expression_str = '-12x^4 - 18x^3+5x^2 + 10x - 30'
     # my_expression_str = '-12/4 - 18*(3+5)  - 30'
-    new_expression = ExpressionResolver(expression_str=my_expression_str, interval=(10,-10), accuracy=4)
+    # my_expression_str = 'cos(x+0.1)'
+    new_expression = ExpressionResolver(expression_str=my_expression_str, interval=(-1,1), accuracy=4)
     print(new_expression.resolve())
     new_expression.draw_expression()
 
