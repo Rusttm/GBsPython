@@ -197,9 +197,10 @@ class JohnBotGB():
                         await context.bot.send_photo(chat_id=chat_id,
                                                      photo=open('acute.jpeg', 'rb'),
                                                      filename='acute.jpeg')
+                else:
+                    await update.message.reply_text("Игра закончена!")
 
                 self.current_gamer[update.message.from_user.id] = 'nogame'
-                await update.message.reply_text("Игра закончена!")
                 await self.start(update, context)
 
     async def TicTacField(self, field_data=[[0, 0, 0], [0, 0, 0], [0, 0, 0]]):
