@@ -1,9 +1,13 @@
+
+""" третья версия -доработан калькулятор до полноценного вычисления функций
+"""
+
 import logging
 import configparser
 import os
 import candygame
 import tictacgame_v2
-import calcgame
+import expr_resolver_bot
 try:
     # get data from in file
     conf = configparser.ConfigParser()
@@ -90,20 +94,6 @@ class JohnBotGB():
         self.NewBot()
 
 
-    # Define a few command handlers. These usually take the two arguments update and
-# context.
-# версия без клавиатуры
-#     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-#         """Send a message and restart bot when the command /start is issued."""
-#         self.current_gamer[update.message.from_user.id] = 'nogame'
-#         user = update.effective_user
-#         await update.message.reply_html(
-#             rf"Hi {user.mention_html()}!",
-#             reply_markup=ForceReply(selective=True),
-#         )
-#         msg = '\n'.join([str(f"{key}: {value}") for key, value in self.commands_dict.items()])
-#         await update.message.reply_html(f"Основные функции:\n {msg}", reply_markup=ForceReply(selective=True))
-
     # работа с клавиатурой
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Sends a message with three inline buttons attached."""
@@ -157,10 +147,9 @@ class JohnBotGB():
         elif query_data == '/candy':
             await self.GameCandy(self.msg_update, self.msg_context)
         elif query_data == '/calc':
-            await self.GameCalc(self.msg_update, self.msg_context)
+            await self.GameCalcStart(self.msg_update, self.msg_context)
         else:
             await self.start(self.msg_update, self.msg_context)
-
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         """Send a message when the command /help is issued."""
@@ -181,6 +170,10 @@ class JohnBotGB():
                                             f"and you wrote {update.message.text}")
         elif current_user_game == 'tictac':
             await self.GameTicTac(command=update.message.text)
+
+        # elif current_user_game == 'calc':
+        #     await self.GameCalc()
+
 
         else:
             print(update.message.text)
@@ -283,12 +276,18 @@ class JohnBotGB():
         await update.message.reply_text(start_msg[1])
         await update.message.reply_text("Сколько \U0001F36C возьмете?")
 
-    async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """start tictak game"""
+    async def GameCalcStart(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """start gamecalc game"""
         self.current_gamer[update.message.from_user.id] = 'calc'
-        self.current_user_game[update.message.from_user.id] = calcgame.CalcGame(user_name=update.message.from_user.id)
+        self.current_user_game[update.message.from_user.id] = expr_resolver_bot.ExpressionResolver(user_name=update.message.from_user.id)
         await update.message.reply_text("Введите выражение для вычисления")
 
+    # async def GameCalc(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    #     """ expression resolver """
+    #     self.current_gamer[update.message.from_user.id] = 'calc'
+    #     self.current_user_game[update.message.from_user.id] = expr_resolver_bot.ExpressionResolver(user_name=update.message.from_user.id,
+    #                                                                                                expression_str=update.message.text)
+    #     await update.message.reply_text("Введите выражение для вычисления")
 
 
 

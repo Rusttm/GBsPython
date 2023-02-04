@@ -16,7 +16,8 @@ from sympy.plotting import plot
 
 class ExpressionResolver:
 
-    def __init__(self, expression_str='x*sin(x)', interval=(-10,10), accuracy=3):
+    def __init__(self, user_name='1', expression_str='x*sin(x)', interval=(-10, 10), accuracy=3):
+        self.user_name = user_name
         self.input_expression_str = expression_str
         self.left = min(interval)
         self.right = max(interval)
@@ -193,9 +194,9 @@ class ExpressionResolver:
         # sympy.init_printing()
         x = sympy.Symbol('x')
         graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title='Function')
-        graph.save(f'{name}.png')
+        graph.save(f'{self.user_name}.png')
         graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title='Derivative')
-        graph.save(f'{name}_diff.png')
+        graph.save(f'{self.user_name}_diff.png')
 
 
 my_expression_str = '-12x^4*sin(cos(x)) - 18x^3+5x^2 + 10x - 30'
