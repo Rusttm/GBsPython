@@ -45,7 +45,7 @@ class ExpressionResolver:
                                 f"Выражение {self.corrected_expr} = {round(eval(self.corrected_expr), self.accuracy)}"]
                     except Exception as e:
                         print(e)
-                        return [continue", f"Выражение {self.input_expression_str} не корректно"]
+                        return ["continue", f"Выражение {self.input_expression_str} не корректно"]
                 self.queue.pop()
                 return ["continue", f"Введите интервал: (-1,1)"]
             except Exception as e:
@@ -235,11 +235,11 @@ class ExpressionResolver:
         graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title='Derivative')
         graph.save(f'{self.user_name}_diff.png')
 
-
-my_expression_str = '-12x^4*sin(cos(x)) - 18x^3+5x^2 + 10x - 30'
-# my_expression_str = '-12x^4 - 18x^3+5x^2 + 10x - 30'
-# my_expression_str = '-12/4 - 18*(3+5)  - 30'
-new_expression = ExpressionResolver(expression_str=my_expression_str, interval=(10,-10), accuracy=4)
-print(new_expression.resolve())
-new_expression.draw_expression()
+if '__name__' == '__main__':
+    my_expression_str = '-12x^4*sin(cos(x)) - 18x^3+5x^2 + 10x - 30'
+    # my_expression_str = '-12x^4 - 18x^3+5x^2 + 10x - 30'
+    # my_expression_str = '-12/4 - 18*(3+5)  - 30'
+    new_expression = ExpressionResolver(expression_str=my_expression_str, interval=(10,-10), accuracy=4)
+    print(new_expression.resolve())
+    new_expression.draw_expression()
 
