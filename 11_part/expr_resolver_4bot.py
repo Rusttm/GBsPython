@@ -277,70 +277,70 @@ class ExpressionResolver:
     def answer_formatting(self):
         result_string = 'Решение:\n'
         if self.result['roots'] != []:
-            result_string += 'Корни уравнения f(x)=0: '
+            result_string += 'Корни уравнения f(x)=0: \n'
             for i, elem in enumerate(self.result['roots']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'x{i}={elem}'
             result_string += '\n'
         else:
             result_string += 'Корней нет\n'
 
         if self.result['minmax']['min'] != []:
-            result_string += 'Минимумы функции f(x): '
+            result_string += 'Минимумы функции f(x): \n'
             for i, elem in enumerate(self.result['minmax']['min']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'x{i}={elem[0]} y{i}={elem[1]}'
             result_string += '\n'
         else:
             result_string += 'Минимумов нет\n'
 
         if self.result['minmax']['max'] != []:
-            result_string += 'Максимумы функции f(x): '
+            result_string += 'Максимумы функции f(x): \n'
             for i, elem in enumerate(self.result['minmax']['max']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'x{i}={elem[0]} y{i}={elem[1]}'
             result_string += '\n'
         else:
             result_string += 'Максимумов нет\n'
 
         if self.result['function+_']['pos'] != []:
-            result_string += 'Функция f(x) положительна на отрезках: '
+            result_string += 'Функция f(x) положительна на отрезках: \n'
             for i, elem in enumerate(self.result['function+_']['pos']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'({elem[0]}:{elem[1]})'
             result_string += '\n'
         else:
             result_string += 'Функция не положительна \n'
 
         if self.result['function+_']['neg'] != []:
-            result_string += 'Функция f(x) отрицательна на отрезках: '
+            result_string += 'Функция f(x) отрицательна на отрезках: \n'
             for i, elem in enumerate(self.result['function+_']['neg']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'({elem[0]}:{elem[1]})'
             result_string += '\n'
         else:
             result_string += 'Функция не отрицательна \n'
 
         if self.result['function_grow']['grow'] != []:
-            result_string += 'Функция f(x) растет на отрезках: '
+            result_string += 'Функция f(x) растет на отрезках: \n'
             for i, elem in enumerate(self.result['function_grow']['grow']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'({elem[0]}:{elem[1]})'
             result_string += '\n'
         else:
             result_string += 'Функция не растет \n'
 
         if self.result['function_grow']['fall'] != []:
-            result_string += 'Функция f(x) падает на отрезках: '
+            result_string += 'Функция f(x) падает на отрезках: \n'
             for i, elem in enumerate(self.result['function_grow']['fall']):
                 if i != 0:
-                    result_string += ', '
+                    result_string += ', \n'
                 result_string += f'({elem[0]}:{elem[1]})'
             result_string += '\n'
         else:
@@ -353,9 +353,9 @@ class ExpressionResolver:
             # sympy.init_printing()
             user_name = str(self.user_name)
             x = sympy.Symbol('x')
-            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title='Function')
+            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title=f'{self.corrected_expr}')
             graph.save(f'{user_name}.png')
-            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title='Derivative')
+            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title=f'Derivative {self.dif_expr}')
             graph.save(f'{user_name}_diff.png')
             return True
         except Exception as e:
