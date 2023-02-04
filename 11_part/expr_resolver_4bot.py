@@ -20,7 +20,7 @@ from sympy import *
 from sympy.abc import x
 from sympy import Symbol, solve
 import platform
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 class ExpressionResolver:
 
