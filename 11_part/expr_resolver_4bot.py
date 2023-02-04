@@ -46,6 +46,9 @@ class ExpressionResolver:
                 self.check_x()
                 if not self.is_function:  # если это не функция возвращаем результат выражения
                     try:
+                        self.sympy_converter()
+                        self.draw_expression(self.user_name)
+
                         return ["end",
                                 f"Выражение {self.corrected_expr} = {round(eval(self.corrected_expr), self.accuracy)}"]
                     except Exception as e:
