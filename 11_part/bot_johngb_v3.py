@@ -182,13 +182,19 @@ class JohnBotGB():
             if result[0] == 'end':
                 # высылаем картинку если калькулятор сработал
                 if current_user_game == 'calc':
-                    chat_id = update.message['chat']['id']
-                    await context.bot.send_photo(chat_id=chat_id,
-                                                 photo=open(f'{update.message.from_user.id}.png', 'rb'),
-                                                 filename=f'{update.message.from_user.id}.png')
-                    await context.bot.send_photo(chat_id=chat_id,
-                                                 photo=open(f'{update.message.from_user.id}_diff.png', 'rb'),
-                                                 filename=f'{update.message.from_user.id}_diff.png')
+                    try:
+                        chat_id = update.message['chat']['id']
+                        await context.bot.send_photo(chat_id=chat_id,
+                                                     photo=open(f'{update.message.from_user.id}.png', 'rb'),
+                                                     filename=f'{update.message.from_user.id}.png')
+                        await context.bot.send_photo(chat_id=chat_id,
+                                                     photo=open(f'{update.message.from_user.id}_diff.png', 'rb'),
+                                                     filename=f'{update.message.from_user.id}_diff.png')
+                    except:
+                        chat_id = update.message['chat']['id']
+                        await context.bot.send_photo(chat_id=chat_id,
+                                                     photo=open('acute.jpeg', 'rb'),
+                                                     filename='acute.jpeg')
 
                 self.current_gamer[update.message.from_user.id] = 'nogame'
                 await update.message.reply_text("Игра закончена!")
