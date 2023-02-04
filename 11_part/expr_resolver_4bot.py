@@ -353,9 +353,9 @@ class ExpressionResolver:
             # sympy.init_printing()
             user_name = str(self.user_name)
             x = sympy.Symbol('x')
-            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title=f'{self.corrected_expr}')
+            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title=f'Function: \n{self.corrected_expr}')
             graph.save(f'{user_name}.png')
-            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title=f'Derivative {self.dif_expr}')
+            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title=f'Derivative: \n{self.dif_expr}')
             graph.save(f'{user_name}_diff.png')
             return True
         except Exception as e:
