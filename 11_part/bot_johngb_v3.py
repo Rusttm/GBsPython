@@ -184,6 +184,8 @@ class JohnBotGB():
                 if current_user_game == 'calc':
                     try:
                         chat_id = update.message['chat']['id']
+                        # graph = self.current_user_game[update.message.from_user.id].draw_expression()
+                        # await context.bot.send_photo(chat_id=chat_id, photo=graph)
                         await context.bot.send_photo(chat_id=chat_id,
                                                      photo=open(f'{update.message.from_user.id}.png', 'rb'),
                                                      filename=f'{update.message.from_user.id}.png')

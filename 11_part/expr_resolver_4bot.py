@@ -19,6 +19,8 @@ from sympy.plotting import plot
 from sympy import *
 from sympy.abc import x
 from sympy import Symbol, solve
+import platform
+import matplotlib as plt
 
 class ExpressionResolver:
 
@@ -356,10 +358,25 @@ class ExpressionResolver:
             # sympy.init_printing()
             user_name = str(self.user_name)
             x = sympy.Symbol('x')
-            graph = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title=f'Function: \n{self.corrected_expr}')
-            graph.save(f'{user_name}.png')
-            graph = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title=f'Derivative: \n{self.dif_expr}')
-            graph.save(f'{user_name}_diff.png')
+            graph_f = sympy.plot(self.sympy_expr, (x, self.left, self.right), show=False, title=f'Function: \n{self.corrected_expr}')
+            graph_f_diff = sympy.plot(sympy.diff(self.sympy_expr, x), (x, self.left, self.right), show=False, title=f'Derivative: \n{self.dif_expr}')
+            if platform.system() == 'Linux':
+                # sympy не имплементировал запись на линуксе
+                for plot in graph_f:
+                    pts = plot.get_points()
+                    plt.plot(pts[0], pts[1])
+                plt.savefig(f'Function: \n{self.corrected_expr}')
+
+                for plot2 in graph_f_diff:
+                    pts2 = plot2.get_points()
+                    plt.plot(pts2[0], pts2[1])
+                plt.savefig(f'Derivative: \n{self.corrected_expr}')
+
+
+
+            else:
+                graph_f.save(f'{user_name}.png')
+                graph_f_diff.save(f'{user_name}_diff.png')
             return True
         except Exception as e:
             print(e)
