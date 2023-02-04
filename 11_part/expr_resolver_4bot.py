@@ -365,12 +365,12 @@ class ExpressionResolver:
                 for plot in graph_f:
                     pts = plot.get_points()
                     plt.plot(pts[0], pts[1])
-                plt.savefig(f'Function: \n{self.corrected_expr}')
+                plt.savefig(f'{user_name}.png')
 
                 for plot2 in graph_f_diff:
                     pts2 = plot2.get_points()
                     plt.plot(pts2[0], pts2[1])
-                plt.savefig(f'Derivative: \n{self.corrected_expr}')
+                plt.savefig(f'{user_name}_diff.png')
 
 
 
