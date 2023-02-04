@@ -186,6 +186,9 @@ class JohnBotGB():
                     await context.bot.send_photo(chat_id=chat_id,
                                                  photo=open(f'{update.message.from_user.id}.png', 'rb'),
                                                  filename=f'{update.message.from_user.id}.png')
+                    await context.bot.send_photo(chat_id=chat_id,
+                                                 photo=open(f'{update.message.from_user.id}_diff.png', 'rb'),
+                                                 filename=f'{update.message.from_user.id}_diff.png')
 
                 self.current_gamer[update.message.from_user.id] = 'nogame'
                 await update.message.reply_text("Игра закончена!")
